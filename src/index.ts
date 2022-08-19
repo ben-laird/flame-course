@@ -1,11 +1,7 @@
-/**
- * A simple function meant to demonstrate all the features of TypeLaunch, from testing to docs to more!
- * This simply greets the user in the console and returns what it sent to the console.
- * @param name - The name of the person you'd like to greet
- * @returns A string of the greeting with the name inserted
- */
-export const greet = (name: string) => {
-  const message = `Hello there, ${name}`;
-  console.log(message); // TODO take a look at Todo Tree!
-  return message;
-};
+export * from "./lib/assignment";
+export * from "./lib/course";
+export * from "./lib/luClass";
+export * from "./lib/module";
+export * from "./lib/onlineCourse";
+export * from "./lib/residentialCourse";
+export * from "./lib/semester";
