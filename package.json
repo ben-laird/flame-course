@@ -164,7 +164,8 @@
       "typedoc",
       "untracked",
       "lcov",
-      "snyk"
+      "snyk",
+      "idek"
     ],
     "ignorePaths": [
       "package.json",
