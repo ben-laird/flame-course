@@ -4,15 +4,31 @@ import Assignment from "./assignment";
 const test = anyTest as TestFn<{ task: Assignment }>;
 
 test.beforeEach((t) => {
-  t.context.task = new Assignment("Homework", 100);
+  t.context.task = new Assignment("Homework", 100, undefined, {
+    score: 95,
+    description: "Something really fun lol",
+  });
 });
 
-test("Task name is correct", (t) => {
-  const assertion = t.context.task.name === "Homework";
-  t.assert(assertion, "Task name did not match what was specfied");
-});
+const assignmentTestMacro = test.macro(
+  (t, propToTest: keyof Assignment, expectedValue: unknown) => {
+    const assertion = t.context.task[propToTest] === expectedValue;
+    t.assert(
+      assertion,
+      `Assignment property ${propToTest} did not match what was specified`
+    );
+  }
+);
 
-test("Task point value is correct", (t) => {
-  const assertion = t.context.task.totalPoints === 100;
-  t.assert(assertion, "Task point did not match what was specfied");
-});
+test("Task name is correct", assignmentTestMacro, "name", "Homework");
+
+test("Task point value is correct", assignmentTestMacro, "totalPoints", 100);
+
+test("Task score is correct", assignmentTestMacro, "score", 95);
+
+test(
+  "Task description is correct",
+  assignmentTestMacro,
+  "description",
+  "Something really fun lol"
+);
