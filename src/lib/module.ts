@@ -1,4 +1,4 @@
-import Assignment from './assignment';
+import Assignment from "./assignment";
 
 /**
  * A representation of a typical Canvas module

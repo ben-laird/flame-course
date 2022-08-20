@@ -24,7 +24,7 @@ export default interface Course<SecCode = string> {
    * The professor teaching the course.
    * If there is no professor, use the placeholder value `"TBA"`
    */
-  professor: string | 'TBA';
+  professor: string | "TBA";
   /**
    * How long the course meets or when the course could potentially meet.
    * This value can be easily found on the Course Registration tool.
@@ -46,7 +46,7 @@ export default interface Course<SecCode = string> {
      */
     accountedPoints: number;
     gradePercent: number;
-    gradeLetter: 'A' | 'B' | 'C' | 'D' | 'F';
+    gradeLetter: "A" | "B" | "C" | "D" | "F";
   };
   modules?: Array<string>;
 }

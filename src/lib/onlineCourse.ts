@@ -1,4 +1,4 @@
-import Course from './course';
+import Course from "./course";
 
 /**
  * Capture the details of a single online course,

@@ -1,5 +1,5 @@
-import OnlineCourse from './onlineCourse';
-import ResidentialCourse from './residentialCourse';
+import OnlineCourse from "./onlineCourse";
+import ResidentialCourse from "./residentialCourse";
 
 /**
  * A representation of an LU Class. An LU Class in this library is defined as a set of related courses,
@@ -27,7 +27,7 @@ export default interface LUClass {
    * Intensives will be in the J-term.
    * The J-term starts about a week before the A-term.
    */
-  subterm: 'A' | 'B' | 'C' | 'D' | 'J';
+  subterm: "A" | "B" | "C" | "D" | "J";
   /**
    * The set of courses that constitute the class.
    * Generally, classes only consist of one course, but in the case of offerings with a lab component,
