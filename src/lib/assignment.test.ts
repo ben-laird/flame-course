@@ -15,19 +15,19 @@ const assignmentTestMacro = test.macro(
     const assertion = t.context.task[propToTest] === expectedValue;
     t.assert(
       assertion,
-      `Assignment property ${propToTest} did not match what was specified`
+      `Assignment property "${propToTest}" did not match what was specified`
     );
   }
 );
 
-test("Task name is correct", assignmentTestMacro, "name", "Homework");
+test("Task name", assignmentTestMacro, "name", "Homework");
 
-test("Task point value is correct", assignmentTestMacro, "totalPoints", 100);
+test("Task point value", assignmentTestMacro, "totalPoints", 100);
 
-test("Task score is correct", assignmentTestMacro, "score", 95);
+test("Task score", assignmentTestMacro, "score", 95);
 
 test(
-  "Task description is correct",
+  "Task description",
   assignmentTestMacro,
   "description",
   "Something really fun lol"
