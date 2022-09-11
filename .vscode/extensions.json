@@ -4,6 +4,7 @@
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "DavidAnson.vscode-markdownlint",
+    "streetsidesoftware.code-spell-checker",
     "vivaxy.vscode-conventional-commits",
     "Gruntfuggly.todo-tree",
     "GitHub.vscode-pull-request-github",
