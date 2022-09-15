@@ -43,8 +43,4 @@ export default class Assignment {
     this.description = details?.description;
     this.addedDate = details?.addedDate;
   }
-
-  something = (memes: string) => {
-    return memes;
-  };
 }
