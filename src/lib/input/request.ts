@@ -1,48 +1,33 @@
-import { gql, GraphQLClient } from "graphql-request";
+import { GraphQLClient } from "graphql-request";
 import { z } from "zod";
 
-type ReqSchema = [req: string, val: z.Schema];
+export interface CanvasQuerySchema<ZValidator extends z.Schema> {
+  req: string;
+  val: ZValidator;
+}
 
-export class CanvasConnection {
+export class CanvasConnection<ZValidator extends z.Schema> {
   private canvasEndpoint =
     "https://libertyuniversity.instructure.com/api/graphql";
 
-  private testQuery: ReqSchema = [
-    gql`
-      query MyQuery {
-        allCourses {
-          _id
-          courseCode
-          name
-        }
-      }
-    `,
-    z.object({
-      allCourses: z.array(
-        z.object({
-          _id: z.string(),
-          courseCode: z.string(),
-          name: z.string(),
-        })
-      ),
-    }),
-  ];
+  private token = process.env.CANVAS_AUTH_TOKEN;
 
-  private query: ReqSchema;
+  private query;
 
-  constructor(reqSchema?: ReqSchema) {
-    this.query = reqSchema ? reqSchema : this.testQuery;
+  constructor(query: CanvasQuerySchema<ZValidator>, token?: string) {
+    this.query = query;
+    if (token !== undefined) this.token = token;
   }
 
   public call = async () => {
     const client = new GraphQLClient(this.canvasEndpoint).setHeader(
       "authorization",
-      `Bearer ${process.env.CANVAS_AUTH_TOKEN}`
+      `Bearer ${this.token}`
     );
-    const [req, val] = this.query;
+    const { req, val } = this.query;
 
     const response = await client.request(req);
     const parsedResponse = val.parse(response);
-    return parsedResponse;
+    return parsedResponse as z.infer<typeof val>;
   };
 }
