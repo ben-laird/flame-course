@@ -1,6 +1,9 @@
 # Project-specific exclusions
 build
 docs
+src/lib/input/canvasSchema.json
+src/lib/input/schemaRequest.gql
+apollo.config.ts
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,node,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,node,macos
