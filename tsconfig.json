@@ -5,7 +5,7 @@
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
-    "outDir": "build/main",
+    "outDir": "artifacts/build/main",
     "rootDir": "src",
     "resolveJsonModule": true,
     "declaration": true,
@@ -24,7 +24,7 @@
   "compileOnSave": false,
   "typedocOptions": {
     "entryPoints": ["src/index.ts"],
-    "out": "docs",
+    "out": "artifacts/docs",
     "exclude": "**/*.test.ts"
   }
 }

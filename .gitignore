@@ -1,6 +1,5 @@
 # Project-specific exclusions
-build
-docs
+artifacts
 src/lib/input/canvasSchema.json
 src/lib/input/schemaRequest.gql
 apollo.config.ts
