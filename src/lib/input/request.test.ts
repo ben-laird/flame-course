@@ -16,6 +16,45 @@ const connectionTest = test.macro(async (t, params: ConTestParams) => {
   t.assert(response, errorMessage);
 });
 
+test("Connection is constructed correctly", (t) => {
+  const connector = new CanvasConnection(
+    {
+      req: gql`
+        query MemesQ {
+          allCourses {
+            _id
+            name
+            courseCode
+          }
+        }
+      `,
+      val: z.object({
+        allCourses: z.array(
+          z.object({
+            _id: z.string(),
+            name: z
+              .string()
+              .regex(
+                /(?:\w{4}\d{3}L?: .+ \(\d{3}\))|(?:\w+)/,
+                "Name didn't match regex!"
+              ),
+            courseCode: z
+              .string()
+              .regex(
+                /(?:\w{4}\d{3}L?_\d{3}_\d{4}\d{2})|(?:[\w ]+)/,
+                "Course code didn't match regex!"
+              )
+              .nullable(),
+          })
+        ),
+      }),
+    },
+    "memes"
+  );
+
+  t.assert(connector, "Canvas connector was not constructed properly!");
+});
+
 test("Canvas returns data", connectionTest, {
   schema: {
     req: gql`
