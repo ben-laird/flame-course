@@ -3,50 +3,83 @@
  * which can then be used to build up an `LUClass`.
  * All sub-examples will use info from Organic Chemistry I (CHEM 301-001).
  */
-export default interface Course<SecCode = string> {
-  /** The title of the course, e.g. `"Organic Chemistry I"` */
-  title: string;
-  /** The identifier of the course in the Canvas system, e.g. `"CHEM 301-001"` */
-  id: {
-    /** The code for the subject the course is under, e.g. `"CHEM"` */
-    subjectCode: string;
-    /**
-     * The code for the course itself, e.g. `301`.
-     * Lab courses will have an "L" after the number, e.g. `"301L"`
-     */
-    courseCode: number;
-    /** The code for the course section, e.g. `001` or `1` */
-    sectionCode: SecCode;
-  };
-  /** The course's description */
-  description?: string;
+export default class Course {
+  private _title: string;
   /**
-   * The professor teaching the course.
-   * If there is no professor, use the placeholder value `"TBA"`
+   * The title of the course, i.e. `"Organic Chemistry I"`
    */
-  professor: string | "TBA";
+  public get title(): string {
+    return this._title;
+  }
+  public set title(title: string) {
+    this._title = title;
+  }
+
+  private _canvasId: number;
   /**
-   * How long the course meets or when the course could potentially meet.
-   * This value can be easily found on the Course Registration tool.
+   * The identifier of the course in the Canvas system, e.g. `308038`
    */
-  duration: { startDate: Date; endDate: Date; elapsedTime: number };
-  /** An object to encode the course's grade status */
-  grade: {
-    credits: 0 | 1 | 2 | 3 | 4;
-    /** The total number of points the course has, oftentimes 1000 points */
-    totalPoints: number;
-    /**
-     * The current number of points scored in the course.
-     * This is the sum of all graded assignments' scores in raw points out of the `totalPoints` value
-     */
-    currentPoints: number;
-    /**
-     * The current number of points that could have been awarded in the course.
-     * This is the sum of all graded assignments' possible points.
-     */
-    accountedPoints: number;
-    gradePercent: number;
-    gradeLetter: "A" | "B" | "C" | "D" | "F";
+  public get canvasId(): number {
+    return this._canvasId;
+  }
+  public set canvasId(id: string | number) {
+    if (typeof id === "string") this._canvasId = parseInt(id);
+    else this._canvasId = id;
+  }
+
+  private _code?: {
+    subject: string;
+    course: number;
+    section: number;
   };
-  modules?: Array<string>;
+
+  public get canvasCourseCode(): string {
+    if (this._code === undefined)
+      throw new Error("Course code info was not found!");
+    const paddedSection = String(this._code.section).padStart(3, "0");
+
+    return `${this._code.subject}${this._code.course}_${paddedSection}`;
+  }
+  public get standardCourseCode(): Course["_code"] {
+    return this._code;
+  }
+
+  public set courseCode(code: string | Course["_code"]) {
+    if (typeof code === "string") {
+      const re = /(?:(\w{4})(\d{3})L?_(\d{3})_\d{4}\d{2})|(?:[\w ]+)/;
+
+      const matches = re.exec(code);
+      if (matches === null)
+        throw new Error("Course code provided does not match code format!");
+
+      this._code = {
+        subject: matches[1],
+        course: parseInt(matches[2]) || 0,
+        section: parseInt(matches[3]) || 0,
+      };
+    } else this._code = code;
+  }
+
+  public get data() {
+    return {
+      title: this._title,
+      canvasId: this._canvasId,
+      code: this._code,
+    };
+  }
+
+  constructor(params: {
+    _id: string;
+    name: string;
+    courseCode: string | null;
+  }) {
+    const matches = params.name.match(
+      /(?:\w{4}\d{3}L?: (.+) \(\d{3}\))|(?:\w+)/
+    );
+    this._title = matches === null ? "" : matches[1];
+    this.canvasId = params._id;
+    this.courseCode =
+      params.courseCode === null ? undefined : params.courseCode;
+    this._canvasId = parseInt(params._id);
+  }
 }
