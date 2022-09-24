@@ -1,5 +1,5 @@
-import OnlineCourse from "./onlineCourse";
-import ResidentialCourse from "./residentialCourse";
+// import OnlineCourse from "./onlineCourse";
+import Course from "./course";
 
 /**
  * A representation of an LU Class. An LU Class in this library is defined as a set of related courses,
@@ -39,10 +39,10 @@ export default interface LUClass {
     /**
      * The lecture component of the offering.
      */
-    lectureCourse: ResidentialCourse | OnlineCourse;
+    lectureCourse: Course; // | OnlineCourse;
     /**
      * The lab component of the offering, if any.
      */
-    labCourse?: ResidentialCourse;
+    labCourse?: Course;
   };
 }
