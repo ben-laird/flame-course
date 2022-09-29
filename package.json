@@ -166,15 +166,16 @@
       "editorconfig",
       "esnext",
       "globby",
+      "idek",
+      "lcov",
       "mkdir",
+      "ochem",
       "prettierignore",
       "sandboxed",
+      "snyk",
       "transpiled",
       "typedoc",
-      "untracked",
-      "lcov",
-      "snyk",
-      "idek"
+      "untracked"
     ],
     "ignorePaths": [
       "package.json",
