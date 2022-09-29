@@ -1,23 +1,19 @@
 import anyTest, { ExecutionContext, TestFn } from "ava";
 import { z } from "zod";
-import Course from "./course";
+import Course, { CourseData } from "./course";
+import { ochemMock } from "./utils/testing";
 
 const test = anyTest as TestFn<{ course: Course }>;
 
-const standardExpected = {
-  title: "Organic Chemistry I",
-  canvasId: 308038,
-  code: { subject: "CHEM", course: 301, section: 1 },
-};
-
 /*
-================================
+=======================================
 Test Macros
-================================
+=======================================
 */
 
 const getterTester = test.macro(
-  (t, getterToTest: keyof Course, expectedVal: unknown) => {
+  (t, params: { getterToTest: keyof Course; expectedVal: unknown }) => {
+    const { getterToTest, expectedVal } = params;
     const actual = t.context.course[getterToTest];
     const expected = expectedVal as typeof actual;
 
@@ -73,11 +69,7 @@ const setterTester = test.macro(
 
 // Set up new Course instance before each test
 test.beforeEach((t) => {
-  t.context.course = new Course({
-    _id: "308038",
-    courseCode: "CHEM301_001_202240",
-    name: "CHEM301: Organic Chemistry I (001)",
-  });
+  t.context.course = new Course(ochemMock.input);
 });
 
 // Constructor test
@@ -97,23 +89,21 @@ test("Course constructed correctly", (t) => {
   const zInterpreted = val.parse(t.context.course.data);
   t.deepEqual(
     zInterpreted,
-    standardExpected,
+    ochemMock.data,
     "Course data doesn't match expected value!"
   );
 });
 
 /*
-================================
+=======================================
 Getter Testers
-================================
+=======================================
 */
 
-test(
-  "Canvas course code getter",
-  getterTester,
-  "canvasCourseCode",
-  "CHEM301_001"
-);
+test("Canvas course code getter", getterTester, {
+  getterToTest: "canvasCourseCode",
+  expectedVal: "CHEM301_001",
+});
 
 test("Canvas course code getter (uh-oh, _code === undefined)", (t) => {
   t.context.course.courseCode = undefined;
@@ -127,20 +117,29 @@ test("Canvas course code getter (uh-oh, _code === undefined)", (t) => {
   );
 });
 
-test("Canvas ID getter", getterTester, "canvasId", 308038);
-
-test("Standard course code getter", getterTester, "standardCourseCode", {
-  subject: "CHEM",
-  course: 301,
-  section: 1,
+test("Canvas ID getter", getterTester, {
+  getterToTest: "canvasId",
+  expectedVal: 308038,
 });
 
-test("Canvas title getter", getterTester, "title", "Organic Chemistry I");
+test("Standard course code getter", getterTester, {
+  getterToTest: "standardCourseCode",
+  expectedVal: {
+    subject: "CHEM",
+    course: 301,
+    section: 1,
+  },
+});
+
+test("Canvas title getter", getterTester, {
+  getterToTest: "title",
+  expectedVal: "Organic Chemistry I",
+});
 
 /*
-================================
+=======================================
 Setter Testers
-================================
+=======================================
 */
 
 test("Title setter", setterTester, {
@@ -148,7 +147,7 @@ test("Title setter", setterTester, {
     t.context.course.title = "Abstract Algebra I";
   },
   expected: {
-    ...standardExpected,
+    ...ochemMock.data,
     title: "Abstract Algebra I",
   },
   errorMessage: "Title wasn't set correctly!",
@@ -159,7 +158,7 @@ test("Canvas ID setter (string)", setterTester, {
     t.context.course.canvasId = "9000";
   },
   expected: {
-    ...standardExpected,
+    ...ochemMock.data,
     canvasId: 9000,
   },
   errorMessage: "Title wasn't set correctly!",
@@ -170,7 +169,7 @@ test("Canvas ID setter (number)", setterTester, {
     t.context.course.canvasId = 9000;
   },
   expected: {
-    ...standardExpected,
+    ...ochemMock.data,
     canvasId: 9000,
   },
   errorMessage: "Title wasn't set correctly!",
@@ -181,7 +180,7 @@ test("Course code setter (undefined)", setterTester, {
     t.context.course.courseCode = undefined;
   },
   expected: {
-    ...standardExpected,
+    ...ochemMock.data,
     code: undefined,
   },
   errorMessage: "Course code wasn't set correctly!",
@@ -194,5 +193,25 @@ test("Course code setter (uh-oh val)", (t) => {
     },
     { message: "Course code provided does not match code format!" },
     "Course code setter did not throw the right error!"
+  );
+});
+
+test("Course without optionals constructed correctly", (t) => {
+  const subject = new Course({
+    ...ochemMock.input,
+    name: "",
+    courseCode: null,
+  });
+
+  const expected: CourseData = {
+    ...ochemMock.data,
+    code: undefined,
+    title: "",
+  };
+
+  t.deepEqual(
+    subject.data,
+    expected,
+    "Course without optionals was constructed incorrectly!"
   );
 });
