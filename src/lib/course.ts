@@ -1,3 +1,21 @@
+export interface CourseParams {
+  _id: string;
+  name: string;
+  courseCode: string | null;
+}
+
+export interface CourseData {
+  title: string;
+  canvasId: number;
+  code?: CourseCode;
+}
+
+export interface CourseCode {
+  subject: string;
+  course: number;
+  section: number;
+}
+
 /**
  * Capture the details of a single representation of a residential course,
  * which can then be used to build up an `LUClass`.
@@ -27,11 +45,7 @@ export default class Course {
     else this._canvasId = id;
   }
 
-  private _code?: {
-    subject: string;
-    course: number;
-    section: number;
-  };
+  private _code?: CourseCode;
 
   public get canvasCourseCode(): string {
     if (this._code === undefined)
@@ -40,11 +54,11 @@ export default class Course {
 
     return `${this._code.subject}${this._code.course}_${paddedSection}`;
   }
-  public get standardCourseCode(): Course["_code"] {
+  public get standardCourseCode(): CourseCode | undefined {
     return this._code;
   }
 
-  public set courseCode(code: string | Course["_code"]) {
+  public set courseCode(code: string | CourseCode | undefined) {
     if (typeof code === "string") {
       const re = /(?:(\w{4})(\d{3})L?_(\d{3})_\d{4}\d{2})|(?:[\w ]+)/;
 
@@ -60,7 +74,7 @@ export default class Course {
     } else this._code = code;
   }
 
-  public get data() {
+  public get data(): CourseData {
     return {
       title: this._title,
       canvasId: this._canvasId,
@@ -68,11 +82,7 @@ export default class Course {
     };
   }
 
-  constructor(params: {
-    _id: string;
-    name: string;
-    courseCode: string | null;
-  }) {
+  constructor(params: CourseParams) {
     const matches = params.name.match(
       /(?:\w{4}\d{3}L?: (.+) \(\d{3}\))|(?:\w+)/
     );
