@@ -1,7 +1,7 @@
 import anyTest, { TestFn } from "ava";
 import Course from "./course";
 import LUClass, { CourseLinks, LUClassData } from "./luClass";
-import { ochemClassMock, ochemLabMock, ochemMock } from "../devUtils/test/testing";
+import { ochemClassMock, ochemLabMock, ochemMock } from "../devUtils/test/testUtils";
 
 interface Subject {
   class: LUClass;

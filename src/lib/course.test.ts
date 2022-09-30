@@ -1,7 +1,7 @@
 import anyTest, { ExecutionContext, TestFn } from "ava";
 import { z } from "zod";
 import Course, { CourseData } from "./course";
-import { ochemMock } from "../devUtils/test/testing";
+import { ochemMock } from "../devUtils/test/testUtils";
 
 const test = anyTest as TestFn<{ course: Course }>;
 
