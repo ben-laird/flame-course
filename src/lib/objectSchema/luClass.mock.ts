@@ -1,4 +1,4 @@
-import { MockData } from "../devUtils/test/testTypes";
+import { MockData } from "../../devUtils/test/testTypes";
 import Course from "./course";
 import { ochemMock, ochemLabMock } from "./course.mock";
 import { LUClassParams, LUClassData } from "./luClass";

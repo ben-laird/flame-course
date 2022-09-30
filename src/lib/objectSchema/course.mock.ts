@@ -1,5 +1,5 @@
+import { MockData } from "../../devUtils/test/testTypes";
 import { CourseData, CourseParams } from "./course";
-import { MockData } from "../devUtils/test/testTypes";
 
 export const ochemMock: MockData<CourseParams, CourseData> = {
   input: {

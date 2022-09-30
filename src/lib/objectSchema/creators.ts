@@ -1,10 +1,10 @@
 import { gql } from "graphql-request";
 import { z } from "zod";
-import Course from "./course";
-import { CanvasConnection } from "./input/request";
+import { CanvasConnection } from "../input/request";
+import Course, { CourseParams } from "./course";
 
 export const courseCreator = async () => {
-  const connection = await new CanvasConnection({
+  const connection = (await new CanvasConnection({
     req: gql`
       query CourseCreator {
         allCourses {
@@ -34,7 +34,7 @@ export const courseCreator = async () => {
         })
       ),
     }),
-  }).call();
+  }).call()) as { allCourses: Array<CourseParams> };
 
   return connection.allCourses.map((courseData) => new Course(courseData));
 };
