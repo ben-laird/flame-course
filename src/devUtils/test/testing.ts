@@ -1,6 +1,6 @@
 import { ExecutionContext } from "ava";
-import Course, { CourseData, CourseParams } from "../lib/course";
-import { LUClassData, LUClassParams } from "../lib/luClass";
+import Course, { CourseData, CourseParams } from "../../lib/course";
+import { LUClassData, LUClassParams } from "../../lib/luClass";
 
 export interface GetterTesterParams<T> {
   getterToTest: keyof T;
