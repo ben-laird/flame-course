@@ -1,7 +1,7 @@
 # Project-specific exclusions
 artifacts
-src/lib/input/canvasSchema.json
-src/lib/input/schemaRequest.gql
+**/canvasSchema.json
+**/schemaRequest.gql
 apollo.config.ts
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,node,macos
