@@ -57,6 +57,8 @@
     "___Section:cicd": "echo 'run CI/CD commands'",
     "lint-staged": "lint-staged",
     "release": "shipjs prepare",
+    "___Section:prod": "echo 'run commands for finalizing or going into production'",
+    "prototype": "run-p test cov:check && npm pack --pack-destination ./artifacts",
     "___Section:underhood": "echo 'run commands under the hood'",
     "prepare": "husky install",
     "prepack": "npm run build"
