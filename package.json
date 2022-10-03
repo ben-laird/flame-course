@@ -47,7 +47,7 @@
     "cov": "run-s build test:unit cov:html cov:lcov && open-cli artifacts/coverage/index.html",
     "cov:html": "nyc report --reporter=html --report-dir=artifacts/coverage --temp-dir artifacts/.nyc_output",
     "cov:lcov": "nyc report --reporter=lcov --report-dir=artifacts/coverage --temp-dir artifacts/.nyc_output",
-    "cov:check": "nyc report && nyc check-coverage --lines 100 --functions 100 --branches 100",
+    "cov:check": "nyc report --report-dir=artifacts/coverage --temp-dir artifacts/.nyc_output && nyc check-coverage --report-dir=artifacts/coverage --temp-dir artifacts --lines 100 --functions 100 --branches 100",
     "___Section:docs": "echo 'docs: create documentation'",
     "doc": "run-s doc:html && open-cli artifacts/docs/index.html",
     "doc:html": "typedoc src/",
