@@ -1,12 +1,15 @@
 import { GraphQLClient } from "graphql-request";
 import { z } from "zod";
 
-export interface CanvasQuerySchema<ZValidator extends z.Schema> {
+export interface CanvasQuerySchema<ZVal extends z.Schema> {
   req: string;
-  val: ZValidator;
+  val: ZVal;
 }
 
-export class CanvasConnection<ZValidator extends z.Schema> {
+export class CanvasConnection<
+  ZVal extends z.Schema,
+  CallShape = z.infer<ZVal>
+> {
   private canvasEndpoint =
     "https://libertyuniversity.instructure.com/api/graphql";
 
@@ -14,20 +17,19 @@ export class CanvasConnection<ZValidator extends z.Schema> {
 
   private query;
 
-  constructor(query: CanvasQuerySchema<ZValidator>, token?: string) {
+  constructor(query: CanvasQuerySchema<ZVal>, token?: string) {
     this.query = query;
     if (token !== undefined) this.token = token;
   }
 
-  public call = async () => {
+  public call = async (): Promise<CallShape> => {
     const client = new GraphQLClient(this.canvasEndpoint).setHeader(
       "authorization",
       `Bearer ${this.token}`
     );
     const { req, val } = this.query;
 
-    const response = await client.request(req);
-    const parsedResponse = val.parse(response);
-    return parsedResponse as z.infer<typeof val>;
+    const response = await client.request<CallShape>(req);
+    return val.parse(response) as CallShape;
   };
 }
