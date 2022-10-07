@@ -1,5 +1,7 @@
 import Course, { CourseData } from "./course";
 
+// TODO Add full documentation
+
 export interface LUClassParams {
   title: string;
   subterm: LUClassSubterm;
@@ -22,6 +24,10 @@ export interface CourseLinks {
 }
 
 export type LUClassSubterm = "A" | "B" | "C" | "D" | "J";
+
+// TODO Add date functionality
+
+// TODO Add grade functionality
 
 /**
  * A representation of an LU Class. An LU Class in this library is defined as a set of related courses,

@@ -7,6 +7,10 @@ test.beforeEach("Construct example Canvas API class", (t) => {
   t.context = new CanvasAPI();
 });
 
+// TODO Write more requirement tests
+
+// TODO Add todo tests
+
 test.failing("Canvas API constructed correctly", (t) => {
   const expected = {
     invalidateInterval: 2000,

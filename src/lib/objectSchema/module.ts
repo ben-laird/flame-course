@@ -1,5 +1,7 @@
 import Assignment from "./assignment";
 
+// TODO Fully implement Module class
+
 /**
  * A representation of a typical Canvas module
  */

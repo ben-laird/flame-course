@@ -1,3 +1,5 @@
+// TODO Figure out what to do with assignments
+
 /**
  * A representation of an assignment seen on Canvas.
  */

@@ -1,5 +1,7 @@
 import LUClass from "./luClass";
 
+// TODO Fully implement Semester class
+
 /**
  * A representation of a semester at Liberty.
  */

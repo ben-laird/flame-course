@@ -1,3 +1,5 @@
+// TODO Add full documentation
+
 export interface CourseParams {
   _id: string;
   name: string;
@@ -15,6 +17,10 @@ export interface CourseCode {
   course: number;
   section: number;
 }
+
+// TODO Add date functionality
+
+// TODO Add grade functionality
 
 /**
  * Capture the details of a single representation of a residential course,

@@ -3,6 +3,8 @@ import { z } from "zod";
 import { CanvasConnection } from "../input/request";
 import Course, { CourseParams } from "./course";
 
+// TODO Switch courseCreator from CanvasConnection to CanvasAPI
+
 export const courseCreator = async () => {
   const connection = (await new CanvasConnection({
     req: gql`
@@ -38,3 +40,5 @@ export const courseCreator = async () => {
 
   return connection.allCourses.map((courseData) => new Course(courseData));
 };
+
+// TODO Add creators

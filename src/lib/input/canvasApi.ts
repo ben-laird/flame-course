@@ -1,3 +1,5 @@
+// TODO Implement cache in CanvasAPI instance
+
 export default class CanvasAPI {
   /**
    * data
