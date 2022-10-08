@@ -1,21 +1,23 @@
 import { gql } from "graphql-request";
 import { z } from "zod";
-import { CanvasConnection } from "../input/request";
+import CanvasAPI from "../input/canvasApi";
 import Course, { CourseParams } from "./course";
 
-// TODO Switch courseCreator from CanvasConnection to CanvasAPI
+// TODO Switch courseCreator from CanvasAPI to CanvasAPI
 
 export const courseCreator = async () => {
-  const connection = (await new CanvasConnection({
-    req: gql`
-      query CourseCreator {
-        allCourses {
-          _id
-          name
-          courseCode
+  const connection = (await new CanvasAPI({
+    req: {
+      query: gql`
+        query CourseCreator {
+          allCourses {
+            _id
+            name
+            courseCode
+          }
         }
-      }
-    `,
+      `,
+    },
     val: z.object({
       allCourses: z.array(
         z.object({
