@@ -121,7 +121,11 @@ export default class CanvasAPI<
 
   private query;
 
-  private cache: APIShape | null = null;
+  private _cache: APIShape | null = null;
+
+  public get cache() {
+    return this._cache;
+  }
 
   private invalidateInterval = 5000;
 
@@ -149,8 +153,8 @@ export default class CanvasAPI<
 
     const response = await client.request<APIShape>(query, vars);
 
-    this.cache = response;
-    setTimeout(() => (this.cache = null), this.invalidateInterval);
+    this._cache = response;
+    setTimeout(() => (this._cache = null), this.invalidateInterval);
 
     return val.parse(response) as APIShape;
   };
