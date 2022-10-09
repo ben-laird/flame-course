@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 import { z } from "zod";
-import CanvasAPI from "../input/canvasApi";
-import Course, { CourseParams } from "./course";
+import CanvasAPI from "./input/canvasApi";
+import Course, { CourseParams } from "./objectSchema/course";
 
 // TODO Switch courseCreator from CanvasAPI to CanvasAPI
 
