@@ -44,3 +44,55 @@ export const courseCreator = async () => {
 };
 
 // TODO Add creators
+
+export const superCreator = async (userId: number) => {
+  const connection = await new CanvasAPI({
+    req: {
+      query: gql`
+        query superCreator($id: ID!) {
+          legacyNode(_id: $id, type: User) {
+            ... on User {
+              __typename
+              enrollments {
+                _id
+                course {
+                  _id
+                  name
+                  courseCode
+                }
+                section {
+                  _id
+                  name
+                }
+                state
+              }
+            }
+          }
+        }
+      `,
+      variables: { id: userId },
+    },
+    val: z.object({
+      user: z.object({
+        __typename: z.string(),
+        enrollments: z
+          .object({
+            _id: z.string(),
+            course: z.object({
+              _id: z.string(),
+              name: z.string(),
+              courseCode: z.string(),
+            }),
+          })
+          .array(),
+        section: z.object({
+          _id: z.string(),
+          name: z.string(),
+        }),
+        state: z.string(),
+      }),
+    }),
+  });
+
+  return connection.call();
+};
