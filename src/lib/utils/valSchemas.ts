@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { subjectCodes } from "./subjects";
 
 export const courseVal = z.object({
   _id: z.string(),
@@ -16,3 +17,7 @@ export const courseVal = z.object({
     )
     .nullable(),
 });
+
+export const subjectCodesVal = z.enum(subjectCodes);
+
+export type SubjectCode = z.infer<typeof subjectCodesVal>;
