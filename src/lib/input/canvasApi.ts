@@ -3,7 +3,21 @@ import { z } from "zod";
 
 // TODO Finish implementing ways to inject variables into requests
 
-// TODO Add full documentation
+// DONE Add full documentation
+
+/**
+ * A raw GraphQL query
+ */
+export interface RawReq {
+  /**
+   * The GraphQL query string
+   */
+  query: string;
+  /**
+   * Any variables to be injected into the GraphQL query string
+   */
+  variables?: Variables;
+}
 
 /**
  * Declare a schema with a GraphQL request and variables, as well as a Zod validator schema
@@ -13,16 +27,10 @@ export interface CanvasQuerySchema<ZVal extends z.Schema> {
   /**
    * The request object stores the GraphQL query string as well as any variables to be inserted.
    */
-  req: {
-    /**
-     * The GraphQL query string
-     */
-    query: string;
-    /**
-     * Any variables to be injected into the GraphQL query string
-     */
-    variables?: Variables;
-  };
+  req: RawReq;
+  /**
+   * The validation schema to use
+   */
   val: ZVal;
 }
 
@@ -50,7 +58,7 @@ export type CanvasAPIParams<ZVal extends z.Schema> = [
 
 /**
  * Extract the shape of the API response from a CanvasAPI instance.
- * @Note This is the same type as what is inferred when z.infer<T> is invoked.
+ * @note This is the same type as what is inferred when `z.infer<T>` is invoked
  * 
  * ```typescript
  * // {
@@ -123,6 +131,9 @@ export default class CanvasAPI<
 
   private _cache: APIShape | null = null;
 
+  /**
+   * Return the API cache of the most recent request
+   */
   public get cache() {
     return this._cache;
   }
@@ -141,7 +152,9 @@ export default class CanvasAPI<
     }
   }
 
-  public callEndpoint = async (gqlVariables?: Variables): Promise<APIShape> => {
+  private callEndpoint = async (
+    gqlVariables?: Variables
+  ): Promise<APIShape> => {
     const client = new GraphQLClient(this.canvasEndpoint).setHeader(
       "authorization",
       `Bearer ${this.token}`
