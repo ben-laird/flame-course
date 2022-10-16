@@ -215,3 +215,8 @@ test("Course without optionals constructed correctly", (t) => {
     "Course without optionals was constructed incorrectly!"
   );
 });
+
+test("toString method", (t) => {
+  console.log(t.context.course + "");
+  t.pass();
+});
