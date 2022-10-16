@@ -1,15 +1,52 @@
 import { gql } from "graphql-request";
 import { z } from "zod";
-import CanvasAPI from "./input/canvasApi";
-import Course, { CourseParams } from "./objectSchema/course";
+import { CanvasAPI } from "./input";
+import { Course, CourseParams, LUClass, LUClassParams } from "./objectSchema";
 
-// TODO Switch courseCreator from CanvasAPI to CanvasAPI
+// DONE Switch courseCreator from CanvasConnection to CanvasAPI
+
+export const singleCourseCreator = async (courseId: number) => {
+  const connection = (await new CanvasAPI({
+    req: {
+      query: gql`
+        query CourseCreatorWithId($id: ID!) {
+          course(id: $id) {
+            _id
+            name
+            courseCode
+          }
+        }
+      `,
+      variables: { id: courseId },
+    },
+    val: z.object({
+      course: z.object({
+        _id: z.string(),
+        name: z
+          .string()
+          .regex(
+            /(?:\w{3,4}\d{3}L?: .+ \(\d{3}\))|(?:\w+)/,
+            "Name didn't match regex!"
+          ),
+        courseCode: z
+          .string()
+          .regex(
+            /(?:\w{3,4}\d{3}L?_\d{3}_\d{4}\d{2})|(?:[\w ]+)/,
+            "Course code didn't match regex!"
+          )
+          .nullable(),
+      }),
+    }),
+  }).call()) as { course: CourseParams };
+
+  return new Course(connection.course);
+};
 
 export const courseCreator = async () => {
   const connection = (await new CanvasAPI({
     req: {
       query: gql`
-        query CourseCreator {
+        query CourseCreatorNoId {
           allCourses {
             _id
             name
@@ -19,37 +56,63 @@ export const courseCreator = async () => {
       `,
     },
     val: z.object({
-      allCourses: z.array(
-        z.object({
+      allCourses: z
+        .object({
           _id: z.string(),
           name: z
             .string()
             .regex(
-              /(?:\w{4}\d{3}L?: .+ \(\d{3}\))|(?:\w+)/,
+              /(?:\w{3,4}\d{3}L?: .+ \(\d{3}\))|(?:\w+)/,
               "Name didn't match regex!"
             ),
           courseCode: z
             .string()
             .regex(
-              /(?:\w{4}\d{3}L?_\d{3}_\d{4}\d{2})|(?:[\w ]+)/,
+              /(?:\w{3,4}\d{3}L?_\d{3}_\d{4}\d{2})|(?:[\w ]+)/,
               "Course code didn't match regex!"
             )
             .nullable(),
         })
-      ),
+        .array(),
     }),
   }).call()) as { allCourses: Array<CourseParams> };
 
   return connection.allCourses.map((courseData) => new Course(courseData));
 };
 
+interface LuClassCreatorParams {
+  params: Omit<LUClassParams, "lectureCourse" | "labCourse">;
+  lectureUrl: string;
+  labUrl?: string;
+}
+
+export const luClassCreator = async (details: LuClassCreatorParams) => {
+  const { params, lectureUrl, labUrl } = details;
+
+  const courseFromUrl = async (url: string) => {
+    const match = url.match(/https:\/\/canvas\.liberty\.edu\/courses\/(d{6})/);
+    if (match === null)
+      throw new Error("One of the urls did not have a course ID!");
+    const id = parseInt(match[1]);
+
+    const outputCourse = await singleCourseCreator(id);
+    return outputCourse;
+  };
+
+  return new LUClass({
+    ...params,
+    lectureCourse: await courseFromUrl(lectureUrl),
+    labCourse: labUrl !== undefined ? await courseFromUrl(labUrl) : undefined,
+  });
+};
+
 // TODO Add creators
 
-export const superCreator = async (userId: number) => {
-  const connection = await new CanvasAPI({
+export const modelCreator = async (userId: number) => {
+  const connection = new CanvasAPI({
     req: {
       query: gql`
-        query superCreator($id: ID!) {
+        query modelCreator($id: ID!) {
           legacyNode(_id: $id, type: User) {
             ... on User {
               __typename
