@@ -1,1 +1,2 @@
-export * from "./valSchemas";
+export * from "./querySchemas";
+export * from "./subjects";
