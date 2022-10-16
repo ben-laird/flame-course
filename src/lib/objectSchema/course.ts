@@ -1,19 +1,28 @@
 import { inspect } from "util";
 
-// TODO Add full documentation
+// DONE Add full documentation
 
+/**
+ * The parameters needed to construct a Course object
+ */
 export interface CourseParams {
   _id: string;
   name: string;
   courseCode: string | null;
 }
 
+/**
+ * The data the Course object holds
+ */
 export interface CourseData {
   title: string;
   canvasId: number;
   code?: CourseCode;
 }
 
+/**
+ * The code
+ */
 export interface CourseCode {
   subject: string;
   course: number;
@@ -55,6 +64,11 @@ export default class Course {
 
   private _code?: CourseCode;
 
+  /**
+   * The code for the Canvas course offering, e.g. `CHEM301_001_202240`.
+   * This format is how Canvas stores course info internally,
+   * so use this method for interacting with any Canvas API.
+   */
   public get canvasCourseCode(): string {
     if (this._code === undefined)
       throw new Error("Course code info was not found!");
@@ -62,6 +76,9 @@ export default class Course {
 
     return `${this._code.subject}${this._code.course}_${paddedSection}`;
   }
+  /**
+   * The code for the Canvas course stored as an object
+   */
   public get standardCourseCode(): CourseCode | undefined {
     return this._code;
   }
