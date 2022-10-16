@@ -1,3 +1,5 @@
+import { inspect } from "util";
+
 // TODO Add full documentation
 
 export interface CourseParams {
@@ -86,6 +88,10 @@ export default class Course {
       canvasId: this._canvasId,
       code: this._code,
     };
+  }
+
+  toString() {
+    return inspect(this.data, { colors: true });
   }
 
   constructor(params: CourseParams) {
