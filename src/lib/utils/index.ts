@@ -1,2 +1,2 @@
-export * from "./querySchemas";
+export * from "./queryAPIs";
 export * from "./subjects";
