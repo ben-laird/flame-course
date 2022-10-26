@@ -1,14 +1,16 @@
-import { GraphQLClient, Variables } from "graphql-request";
+import { GraphQLClient } from "graphql-request";
 import { z } from "zod";
 
 // TODO Finish implementing ways to inject variables into requests
 
 // DONE Add full documentation
 
+type GqlVars = Record<string, number | string> | undefined;
+
 /**
  * A raw GraphQL query
  */
-export interface RawReq {
+export interface RawReq<Vars extends GqlVars = undefined> {
   /**
    * The GraphQL query string
    */
@@ -16,18 +18,25 @@ export interface RawReq {
   /**
    * Any variables to be injected into the GraphQL query string
    */
-  variables?: Variables;
+  variables?: Vars;
 }
+
+export type ReqFunc<ZVal extends z.Schema, Vars extends GqlVars = undefined> = (
+  vars: Vars
+) => CanvasQuerySchema<ZVal, Vars>;
 
 /**
  * Declare a schema with a GraphQL request and variables, as well as a Zod validator schema
  * to sanitize and type-secure incoming data.
  */
-export interface CanvasQuerySchema<ZVal extends z.Schema> {
+export interface CanvasQuerySchema<
+  ZVal extends z.Schema,
+  Vars extends GqlVars
+> {
   /**
    * The request object stores the GraphQL query string as well as any variables to be inserted.
    */
-  req: RawReq;
+  req: RawReq<Vars>;
   /**
    * The validation schema to use
    */
@@ -51,8 +60,8 @@ export interface CanvasAPIOptions {
 /**
  * The parameters needed to construct a CanvasAPI object
  */
-export type CanvasAPIParams<ZVal extends z.Schema> = [
-  query: CanvasQuerySchema<ZVal>,
+export type CanvasAPIParams<ZVal extends z.Schema, Vars extends GqlVars> = [
+  query: ReqFunc<ZVal, Vars>,
   options?: CanvasAPIOptions
 ];
 
@@ -108,18 +117,16 @@ export type CanvasAPIParams<ZVal extends z.Schema> = [
   );
  * ```
  */
-export type ShapeInfer<T extends CanvasAPI<z.Schema>> = T extends CanvasAPI<
-  z.Schema,
-  infer R
->
-  ? R
-  : never;
+export type ShapeInfer<
+  T extends CanvasAPI<z.Schema, Record<string, number | string>>
+> = T extends CanvasAPI<z.Schema, infer R> ? R : never;
 
 /**
  * A single connection to the Canvas GraphQL API. This class handles sending one static query to the endpoint and caching the response.
  */
 export default class CanvasAPI<
   ZVal extends z.Schema,
+  Vars extends GqlVars = undefined,
   APIShape = z.infer<ZVal>
 > {
   private canvasEndpoint =
@@ -140,7 +147,7 @@ export default class CanvasAPI<
 
   private invalidateInterval = 5000;
 
-  constructor(...params: CanvasAPIParams<ZVal>) {
+  constructor(...params: CanvasAPIParams<ZVal, Vars>) {
     const [query, options] = params;
 
     this.query = query;
@@ -152,19 +159,15 @@ export default class CanvasAPI<
     }
   }
 
-  private callEndpoint = async (
-    gqlVariables?: Variables
-  ): Promise<APIShape> => {
+  private callEndpoint = async (gqlVariables: Vars): Promise<APIShape> => {
     const client = new GraphQLClient(this.canvasEndpoint).setHeader(
       "authorization",
       `Bearer ${this.token}`
     );
-    const { req, val } = this.query;
+    const { req, val } = this.query(gqlVariables);
     const { query, variables } = req;
 
-    const vars = gqlVariables !== undefined ? gqlVariables : variables;
-
-    const response = await client.request<APIShape>(query, vars);
+    const response = await client.request<APIShape>(query, variables);
 
     this._cache = response;
     setTimeout(() => (this._cache = null), this.invalidateInterval);
@@ -172,7 +175,7 @@ export default class CanvasAPI<
     return val.parse(response) as APIShape;
   };
 
-  public call = async (gqlVariables?: Variables): Promise<APIShape> => {
+  public call = async (gqlVariables: Vars): Promise<APIShape> => {
     if (this.cache !== null) return this.cache;
     else return this.callEndpoint(gqlVariables);
   };

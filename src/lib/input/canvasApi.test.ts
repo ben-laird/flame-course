@@ -1,26 +1,26 @@
 import test from "ava";
 import { gql } from "graphql-request";
 import { z } from "zod";
-import CanvasAPI, { CanvasQuerySchema } from "./canvasApi";
+import CanvasAPI, { ReqFunc } from "./canvasApi";
 
 // TODO Add extra coverage tests
 
 interface ConTestParams {
-  schema: CanvasQuerySchema<z.Schema>;
+  query: ReqFunc<z.Schema>;
   errorMessage: string;
   display?: boolean;
 }
 
 const connectionTest = test.macro(async (t, params: ConTestParams) => {
-  const { schema, errorMessage, display } = params;
-  const response = await new CanvasAPI(schema).call();
+  const { query, errorMessage, display } = params;
+  const response = await new CanvasAPI(query).call(undefined);
   if (display !== undefined && display) console.log(response);
   t.assert(response, errorMessage);
 });
 
 test("Connection is constructed correctly", (t) => {
   const connector = new CanvasAPI(
-    {
+    () => ({
       req: {
         query: gql`
           query MemesQ {
@@ -52,7 +52,7 @@ test("Connection is constructed correctly", (t) => {
           })
         ),
       }),
-    },
+    }),
     { token: "memes", endpoint: "bigmemes" }
   );
 
@@ -60,7 +60,7 @@ test("Connection is constructed correctly", (t) => {
 });
 
 test("Canvas returns data", connectionTest, {
-  schema: {
+  query: () => ({
     req: {
       query: gql`
         query ReturnDataQ {
@@ -92,13 +92,13 @@ test("Canvas returns data", connectionTest, {
         })
       ),
     }),
-  },
+  }),
   errorMessage: "Canvas endpoint did not return data properly!",
   display: true,
 });
 
 test("Canvas returns schema types", connectionTest, {
-  schema: {
+  query: () => ({
     req: {
       query: gql`
         query SchemaFragQ {
@@ -119,12 +119,12 @@ test("Canvas returns schema types", connectionTest, {
         ),
       }),
     }),
-  },
+  }),
   errorMessage: "Canvas endpoint did not return schema types correctly!",
 });
 
 test("Canvas returns fragment of docs", connectionTest, {
-  schema: {
+  query: () => ({
     req: {
       query: gql`
         query SchemaDocsFragQ {
@@ -171,6 +171,6 @@ test("Canvas returns fragment of docs", connectionTest, {
         ),
       }),
     }),
-  },
+  }),
   errorMessage: "Canvas endpoint did not return documentation correctly!",
 });
