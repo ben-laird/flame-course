@@ -1,7 +1,7 @@
 import { GraphQLClient } from "graphql-request";
 import { z } from "zod";
 
-// TODO Finish implementing ways to inject variables into requests
+// DONE Finish implementing ways to inject variables into requests
 
 // DONE Add full documentation
 
