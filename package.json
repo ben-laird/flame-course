@@ -188,7 +188,8 @@
       "yarn.lock",
       "tsconfig.json",
       "tsconfig.module.json",
-      "node_modules/**"
+      "node_modules/**",
+      "**/subjects.ts"
     ],
     "allowCompoundWords": true
   },

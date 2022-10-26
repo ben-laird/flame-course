@@ -1,4 +1,6 @@
-// export type SubjectCode = keyof typeof Subject;
+import { z } from "zod";
+
+export type SubjectCode = keyof typeof Subject;
 
 export enum Subject {
   ACCT = "Accounting",
@@ -385,3 +387,5 @@ export const subjectCodes = [
   "WRSP",
   "YOUT", // 190
 ] as const;
+
+export const subjectCodesVal = z.enum(subjectCodes);
