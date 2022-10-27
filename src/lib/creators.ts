@@ -19,7 +19,7 @@ export const courseCreator = async () => {
   return connection.allCourses.map((courseData) => new Course(courseData));
 };
 
-interface LuClassCreatorParams {
+export interface LuClassCreatorParams {
   params: Omit<LUClassParams, "lectureCourse" | "labCourse">;
   lectureUrl: string;
   labUrl?: string;
