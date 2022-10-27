@@ -4,19 +4,19 @@ import { courseAPI, modelAPI, singleCourseAPI } from "./utils";
 // DONE Switch courseCreator from CanvasConnection to CanvasAPI
 
 export const singleCourseCreator = async (courseId: number) => {
-  const connection = (await singleCourseAPI.call({ id: courseId })) as {
+  const { course } = (await singleCourseAPI.call({ id: courseId })) as {
     course: CourseParams;
   };
 
-  return new Course(connection.course);
+  return new Course(course);
 };
 
 export const courseCreator = async () => {
-  const connection = (await courseAPI.call(undefined)) as {
+  const { allCourses } = (await courseAPI.call(undefined)) as {
     allCourses: Array<CourseParams>;
   };
 
-  return connection.allCourses.map((courseData) => new Course(courseData));
+  return allCourses.map((courseData) => new Course(courseData));
 };
 
 export interface LuClassCreatorParams {
