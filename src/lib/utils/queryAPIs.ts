@@ -75,13 +75,82 @@ export const modelAPI = new CanvasAPI((vars: { id: number }) => ({
       query modelQ($id: ID!) {
         legacyNode(_id: $id, type: User) {
           ... on User {
-            __typename
             enrollments {
               _id
               course {
                 _id
                 name
                 courseCode
+                modulesConnection {
+                  nodes {
+                    _id
+                    name
+                    position
+                    moduleItems {
+                      _id
+                      content {
+                        __typename
+                        ... on Page {
+                          id
+                          _id
+                          title
+                          createdAt
+                          updatedAt
+                        }
+                        ... on SubHeader {
+                          title
+                        }
+                        ... on Assignment {
+                          id
+                          name
+                          _id
+                          description
+                          allowedAttempts
+                          dueAt
+                          lockAt
+                          pointsPossible
+                          htmlUrl
+                          state
+                        }
+                        ... on File {
+                          id
+                          _id
+                          contentType
+                          fileUrl: url
+                        }
+                        ... on ExternalTool {
+                          createdAt
+                          description
+                          _id
+                          name
+                          toolUrl: url
+                        }
+                        ... on Discussion {
+                          id
+                          _id
+                          title
+                        }
+                        ... on Quiz {
+                          id
+                          _id
+                        }
+                        ... on ExternalUrl {
+                          createdAt
+                          title
+                          extUrl: url
+                          _id
+                        }
+                        ... on ModuleExternalTool {
+                          createdAt
+                          updatedAt
+                          _id
+                          modUrl: url
+                        }
+                      }
+                      moduleUrl: url
+                    }
+                  }
+                }
               }
               section {
                 _id
@@ -113,6 +182,36 @@ export const modelAPI = new CanvasAPI((vars: { id: number }) => ({
         name: z.string(),
       }),
       state: z.string(),
+    }),
+  }),
+}));
+
+export const idsAPI = new CanvasAPI((vars: { id: number }) => ({
+  req: {
+    query: gql`
+      query CourseIdsQ($id: ID!) {
+        legacyNode(_id: $id, type: User) {
+          ... on User {
+            enrollments {
+              course {
+                _id
+              }
+            }
+          }
+        }
+      }
+    `,
+    variables: vars,
+  },
+  val: z.object({
+    user: z.object({
+      enrollments: z.object({
+        course: z
+          .object({
+            _id: z.number(),
+          })
+          .array(),
+      }),
     }),
   }),
 }));
