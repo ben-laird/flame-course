@@ -5,7 +5,7 @@ import { z } from "zod";
 
 // DONE Add full documentation
 
-type GqlVars = Record<string, number | string> | undefined;
+export type GqlVars = Record<string, number | string> | undefined;
 
 /**
  * A raw GraphQL query
