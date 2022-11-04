@@ -1,4 +1,5 @@
-export { default as CanvasAPI } from "./canvasAPI";
-export * from "./canvasApi";
+export { default as CanvasProvider } from "./canvas";
+export * from "./canvas";
+export { default as Transformer } from "./transformer";
 
 // TODO Add Markdown input functionality
