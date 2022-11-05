@@ -1,17 +1,16 @@
 import { GraphQLClient } from "graphql-request";
 import { z } from "zod";
-import Connection from "./connection";
+import Connection, { ConnectionInputParams } from "./connection";
 
-type ConnectParams = [
-  query: string,
-  variables?: Record<string, string | number>
-];
+type ConnectParams = Readonly<
+  [query: string, variables?: Record<string, string | number>]
+>;
 
 export default class Canvas<
-  InputParams,
   ZVal extends z.Schema,
+  InputParams extends ConnectionInputParams = null,
   OutShape extends z.infer<ZVal> = z.infer<ZVal>
-> extends Connection<InputParams, ConnectParams, OutShape, ZVal> {
+> extends Connection<ConnectParams, OutShape, ZVal, InputParams> {
   private endpoint = "canvas.liberty.edu";
 
   private token = process.env.CANVAS_AUTH_TOKEN;
