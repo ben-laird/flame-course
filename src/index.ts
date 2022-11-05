@@ -1,6 +1,4 @@
 import * as Schema from "./lib/objectSchema";
-import * as Create from "./lib/creators";
 
-export const FlameCourse = { ...Schema, ...Create };
+export const FlameCourse = { ...Schema };
 export { Schema };
-export { Create };
