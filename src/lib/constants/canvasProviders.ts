@@ -1,96 +1,36 @@
 import { gql } from "graphql-request";
 import { z } from "zod";
 import { CanvasProvider } from "../input";
+import { FragUtil } from "../input";
+import { Fragment } from ".";
 
 export const modelProvider = new CanvasProvider(
-  (variables: { id: number }) => [
-    gql`
-      query modelQ($id: ID!) {
-        Model: legacyNode(_id: $id, type: User) {
-          ... on User {
-            enrollments {
-              enrollmentId: _id
-              course {
-                courseId: _id
-                name
-                courseCode
-                modulesConnection {
-                  nodes {
-                    nodeId: _id
-                    name
-                    position
-                    items: moduleItems {
-                      itemId: _id
-                      itemUrl: url
-                      content {
-                        type: __typename
-                        ... on SubHeader {
-                          title
-                        }
-                        ... on Page {
-                          id: _id
-                          title
-                          createdAt
-                          updatedAt
-                        }
-                        ... on Assignment {
-                          id: _id
-                          name
-                          description
-                          htmlUrl
-                          pointsPossible
-                          dueAt
-                          lockAt
-                          state
-                          allowedAttempts
-                          submissionsConnection {
-                            nodes {
-                              id: _id
-                              rubricAssessmentsConnection {
-                                nodes {
-                                  assessmentRatings {
-                                    _id
-                                    criterion {
-                                      _id
-                                    }
-                                  }
-                                }
-                              }
-                            }
+  ...FragUtil.apply(
+    [Fragment.course, Fragment.module, Fragment.moduleItem],
+    ([courseFrag, moduleFrag, moduleItemFrag]) => {
+      const [courseGQL, courseVal] = courseFrag;
+      const [moduleGQL, moduleVal] = moduleFrag;
+      const [moduleItemGQL, moduleItemVal] = moduleItemFrag;
+
+      return [
+        (variables: { id: number }) => [
+          gql`
+            ${courseGQL}
+            ${moduleGQL}
+            ${moduleItemGQL}
+            query modelQ($id: ID!) {
+              Model: legacyNode(_id: $id, type: User) {
+                ... on User {
+                  enrollments {
+                    id: _id
+                    course {
+                      ...CourseFragment
+                      modulesConnection {
+                        modules: nodes {
+                          ...ModuleFragment
+                          items: moduleItems {
+                            ...ModuleItemFragment
                           }
-                        }
-                        ... on File {
-                          id: _id
-                          contentType
-                          fileUrl: url
-                        }
-                        ... on ExternalTool {
-                          createdAt
-                          description
-                          _id
-                          name
-                          toolUrl: url
-                        }
-                        ... on Discussion {
-                          id
-                          _id
-                          title
-                        }
-                        ... on Quiz {
-                          id
-                          _id
-                        }
-                        ... on ExternalUrl {
-                          createdAt
-                          title
-                          extUrl: url
-                          _id
-                        }
-                        ... on ModuleExternalTool {
-                          createdAt
-                          updatedAt
-                          _id
-                          modUrl: url
                         }
                       }
                     }
@@ -98,20 +38,34 @@ export const modelProvider = new CanvasProvider(
                 }
               }
             }
-          }
-        }
-      }
-    `,
-    variables,
-  ],
-  z.object({
-    Model: z.object({
-      enrollments: z
-        .object({
-          enrollmentId: z.number(),
-          course: z.object({}),
-        })
-        .array(),
-    }),
-  })
+          `,
+          variables,
+        ],
+        z.object({
+          Model: z.object({
+            enrollments: z
+              .object({
+                id: z.number(),
+                course: courseVal
+                  .extend({
+                    modulesConnection: z
+                      .object({
+                        modules: moduleVal
+                          .extend({
+                            items: moduleItemVal.array().nullable(),
+                          })
+                          .nullable()
+                          .array()
+                          .nullable(),
+                      })
+                      .nullable(),
+                  })
+                  .nullable(),
+              })
+              .array(),
+          }),
+        }),
+      ] as const;
+    }
+  )
 );
