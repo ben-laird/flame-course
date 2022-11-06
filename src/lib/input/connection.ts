@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AnyConnection = Connection<any[], any, z.Schema, any>;
+export type AnyConnection = Connection<Readonly<any[]>, any, z.Schema, any>;
 
 export type ConnectionInfer<
   T extends AnyConnection,
