@@ -7,8 +7,8 @@ type Query<ZVal extends z.Schema, Params = null> = Readonly<
 type Fragment<ZVal extends z.Schema> = Readonly<[string, ZVal]>;
 
 type FragsParams<FragVal extends z.Schema> = [
-  Readonly<Fragment<FragVal>>,
-  ...Readonly<Fragment<FragVal>>[]
+  Fragment<FragVal>,
+  ...Fragment<FragVal>[]
 ];
 
 type GQLParams = Record<string, string | number> | null;
