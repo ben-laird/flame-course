@@ -3,7 +3,7 @@ import { z } from "zod";
 import Connection, { ConnectionInputParams } from "./connection";
 
 type ConnectParams = Readonly<
-  [query: string, variables?: Record<string, string | number>]
+  [query: string, variables?: ConnectionInputParams]
 >;
 
 export default class Canvas<
@@ -22,7 +22,10 @@ export default class Canvas<
       "authorization",
       `Bearer ${this.token}`
     );
-    return client.request<OutShape>(query, variables);
+    return client.request<OutShape>(
+      query,
+      variables !== null ? variables : undefined
+    );
   };
 
   constructor(
