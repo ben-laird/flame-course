@@ -1,12 +1,12 @@
 import { gql } from "graphql-request";
 import { z } from "zod";
 import { CanvasProvider } from "../input";
-import { FragUtil } from "../input";
-import { Fragment } from ".";
+import { FragmentUtil } from "../input";
+import { FragmentConst } from ".";
 
 export const modelProvider = new CanvasProvider(
-  ...FragUtil.apply(
-    [Fragment.course, Fragment.module, Fragment.moduleItem],
+  ...FragmentUtil.apply(
+    [FragmentConst.course, FragmentConst.module, FragmentConst.moduleItem],
     ([courseFrag, moduleFrag, moduleItemFrag]) => {
       const [courseGQL, courseVal] = courseFrag;
       const [moduleGQL, moduleVal] = moduleFrag;
