@@ -22,7 +22,7 @@ const applyFragments = <
   builder: (frags: Frags) => Query<OutVal, Params>
 ) => builder(frags);
 
-export const joinFragments = <
+const composeFragments = <
   Frags extends FragsParams<z.Schema>,
   OutVal extends z.Schema
 >(
@@ -30,4 +30,4 @@ export const joinFragments = <
   builder: (frags: Frags) => Fragment<OutVal>
 ) => builder(frags);
 
-export default applyFragments;
+export { applyFragments as apply, composeFragments as compose };
