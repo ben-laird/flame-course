@@ -1,6 +1,6 @@
 import { gql } from "graphql-request";
 import { z } from "zod";
-import { FragUtil } from "../input";
+import { FragmentUtil } from "../input";
 import { subjectCodesVal } from "./subjects";
 
 export const course = [
@@ -106,7 +106,7 @@ export const extTool = [
   }),
 ] as const;
 
-export const discussion = FragUtil.compose([file], ([file]) => {
+export const discussion = FragmentUtil.compose([file], ([file]) => {
   const [fileGQL, fileVal] = file;
   return [
     gql`
@@ -237,7 +237,7 @@ export const rubric = [
   }),
 ] as const;
 
-export const submission = FragUtil.compose([file], ([file]) => {
+export const submission = FragmentUtil.compose([file], ([file]) => {
   const [fileGQL, fileVal] = file;
 
   return [
@@ -277,7 +277,7 @@ export const submission = FragUtil.compose([file], ([file]) => {
   ];
 });
 
-export const assignment = FragUtil.compose(
+export const assignment = FragmentUtil.compose(
   [rubric, submission],
   ([rubricFrag, fileFrag]) => {
     const [rubricGQL, rubricVal] = rubricFrag;
