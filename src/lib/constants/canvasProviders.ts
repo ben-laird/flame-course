@@ -1,7 +1,6 @@
 import { gql } from "graphql-request";
 import { z } from "zod";
-import { CanvasProvider } from "../input";
-import { FragmentUtil } from "../input";
+import { CanvasProvider, FragmentUtil } from "../input";
 import { FragmentConst } from ".";
 
 export const modelProvider = new CanvasProvider(
