@@ -180,6 +180,7 @@
       "snyk",
       "transpiled",
       "typedoc",
+      "unposted",
       "untracked"
     ],
     "ignorePaths": [
