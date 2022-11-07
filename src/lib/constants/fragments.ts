@@ -151,7 +151,7 @@ export const discussion = FragmentUtil.compose([file], ([file]) => {
                 })
                 .nullable(),
               message: z.string().nullable(),
-              attachment: fileVal,
+              attachment: fileVal.nullable(),
               subentriesCount: z.number().nullable(),
               createdAt: z.date().nullable(),
               updatedAt: z.date().nullable(),
@@ -262,7 +262,9 @@ export const submission = FragmentUtil.compose([file], ([file]) => {
     `,
     z.object({
       id: z.number(),
-      gradingStatus: z.string().nullable(),
+      gradingStatus: z
+        .enum(["needs_grading", "excused", "needs_review", "graded"])
+        .nullable(),
       submittedAt: z.date().nullable(),
       grade: z.string().nullable(),
       score: z.number().nullable(),
@@ -271,7 +273,9 @@ export const submission = FragmentUtil.compose([file], ([file]) => {
       late: z.boolean().nullable(),
       missing: z.boolean().nullable(),
       isCurrent: z.boolean().nullable(),
-      latePolicyStatus: z.string().nullable(),
+      latePolicyStatus: z
+        .enum(["late", "missing", "extended", "none"])
+        .nullable(),
       attachment: fileVal.nullable(),
     }),
   ];
@@ -320,7 +324,17 @@ export const assignment = FragmentUtil.compose(
         dueAt: z.date().nullable(),
         lockAt: z.date().nullable(),
         updatedAt: z.date().nullable(),
-        state: z.string(), // Need to update this to z.enum()
+        state: z.enum([
+          "unpublished",
+          "published",
+          "deleted",
+          "duplicating",
+          "failed_to_duplicate",
+          "importing",
+          "fail_to_import",
+          "migrating",
+          "failed_to_migrate",
+        ]),
         allowedAttempts: z.number().nullable(),
         submissions: z
           .object({
