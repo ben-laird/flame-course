@@ -3,7 +3,7 @@ import { z } from "zod";
 import { FragmentUtil } from "../input";
 import { subjectCodesVal } from "./subjects";
 
-export const course = FragmentUtil.create(
+export const course = FragmentUtil.createFragment(
   gql`
     fragment CourseFragment on Course {
       id: _id
@@ -18,7 +18,7 @@ export const course = FragmentUtil.create(
   })
 );
 
-export const module = FragmentUtil.create(
+export const module = FragmentUtil.createFragment(
   gql`
     fragment ModuleFragment on Module {
       id: _id
@@ -33,7 +33,7 @@ export const module = FragmentUtil.create(
   })
 );
 
-export const moduleItem = FragmentUtil.create(
+export const moduleItem = FragmentUtil.createFragment(
   gql`
     fragment ModuleItemFragment on ModuleItem {
       id: _id
@@ -46,7 +46,7 @@ export const moduleItem = FragmentUtil.create(
   })
 );
 
-export const subHeader = FragmentUtil.create(
+export const subHeader = FragmentUtil.createFragment(
   gql`
     fragment SubHeaderFragment on SubHeader {
       title
@@ -57,7 +57,7 @@ export const subHeader = FragmentUtil.create(
   })
 );
 
-export const page = FragmentUtil.create(
+export const page = FragmentUtil.createFragment(
   gql`
     fragment PageFragment on Page {
       id: _id
@@ -74,7 +74,7 @@ export const page = FragmentUtil.create(
   })
 );
 
-export const file = FragmentUtil.create(
+export const file = FragmentUtil.createFragment(
   gql`
     fragment FileFragment on File {
       id: _id
@@ -89,7 +89,7 @@ export const file = FragmentUtil.create(
   })
 );
 
-export const extTool = FragmentUtil.create(
+export const extTool = FragmentUtil.createFragment(
   gql`
     fragment ExtToolFragment on ExternalTool {
       id: _id
@@ -107,7 +107,7 @@ export const extTool = FragmentUtil.create(
 );
 
 export const discussion = FragmentUtil.compose([file], ([[fileGQL, fileVal]]) =>
-  FragmentUtil.create(
+  FragmentUtil.createFragment(
     gql`
       ${fileGQL}
       fragment DiscussionFragment on Discussion {
@@ -164,7 +164,7 @@ export const discussion = FragmentUtil.compose([file], ([[fileGQL, fileVal]]) =>
   )
 );
 
-export const quiz = FragmentUtil.create(
+export const quiz = FragmentUtil.createFragment(
   gql`
     fragment QuizFragment on Quiz {
       id: _id
@@ -179,7 +179,7 @@ export const quiz = FragmentUtil.create(
   })
 );
 
-export const extUrl = FragmentUtil.create(
+export const extUrl = FragmentUtil.createFragment(
   gql`
     fragment ExtUrlFragment on ExternalUrl {
       id: _id
@@ -194,7 +194,7 @@ export const extUrl = FragmentUtil.create(
   })
 );
 
-export const moduleExtTool = FragmentUtil.create(
+export const moduleExtTool = FragmentUtil.createFragment(
   gql`
     fragment ModuleExtToolFragment on ModuleExternalTool {
       id: _id
@@ -207,7 +207,7 @@ export const moduleExtTool = FragmentUtil.create(
   })
 );
 
-export const rubric = FragmentUtil.create(
+export const rubric = FragmentUtil.createFragment(
   gql`
     fragment RubricFragment on Rubric {
       id: _id
@@ -237,7 +237,7 @@ export const rubric = FragmentUtil.create(
 );
 
 export const submission = FragmentUtil.compose([file], ([[fileGQL, fileVal]]) =>
-  FragmentUtil.create(
+  FragmentUtil.createFragment(
     gql`
       ${fileGQL}
       fragment SubmissionFragment on Submission {
@@ -281,7 +281,7 @@ export const submission = FragmentUtil.compose([file], ([[fileGQL, fileVal]]) =>
 export const assignment = FragmentUtil.compose(
   [rubric, submission],
   ([[rubricGQL, rubricVal], [submissionGQL, submissionVal]]) =>
-    FragmentUtil.create(
+    FragmentUtil.createFragment(
       gql`
         ${rubricGQL}
         ${submissionGQL}
@@ -339,7 +339,7 @@ export const assignment = FragmentUtil.compose(
     )
 );
 
-export const grades = FragmentUtil.create(
+export const grades = FragmentUtil.createFragment(
   gql`
     fragment GradesFragment on Grades {
       currentGrade
