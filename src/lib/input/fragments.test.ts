@@ -1,7 +1,7 @@
 import test from "ava";
 import { gql } from "graphql-request";
 import { z } from "zod";
-import applyFragments, { joinFragments } from "./fragments";
+import { apply, compose } from "./fragments";
 
 const courseFrag = [
   gql`
@@ -34,7 +34,7 @@ const sectionFrag = [
 ] as const;
 
 test("Joining fragments together", (t) => {
-  const actualComposedFragments = joinFragments([sectionFrag], (frags) => {
+  const actualComposedFragments = compose([sectionFrag], (frags) => {
     const [section] = frags;
 
     const [gqlFragment, sectionVal] = section;
@@ -149,7 +149,7 @@ test("Applying a fragment to a base", (t) => {
     }
   `;
 
-  const actualBase = applyFragments([courseFrag], (frags) => {
+  const actualBase = apply([courseFrag], (frags) => {
     const [course] = frags;
 
     const [gqlFragment, courseVal] = course;
@@ -270,7 +270,7 @@ test("Applying multiple fragments to a base", (t) => {
     }
   `;
 
-  const actualBase = applyFragments([courseFrag, sectionFrag], (frags) => {
+  const actualBase = apply([courseFrag, sectionFrag], (frags) => {
     const [course, section] = frags;
 
     const [courseGqlFragment, courseVal] = course;
