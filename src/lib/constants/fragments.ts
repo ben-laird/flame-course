@@ -3,7 +3,7 @@ import { z } from "zod";
 import { FragmentUtil } from "../input";
 import { subjectCodesVal } from "./subjects";
 
-export const course = [
+export const course = FragmentUtil.create(
   gql`
     fragment CourseFragment on Course {
       id: _id
@@ -15,10 +15,10 @@ export const course = [
     id: z.number(),
     name: z.string(),
     courseCode: subjectCodesVal.nullable(),
-  }),
-] as const;
+  })
+);
 
-export const module = [
+export const module = FragmentUtil.create(
   gql`
     fragment ModuleFragment on Module {
       id: _id
@@ -30,10 +30,10 @@ export const module = [
     id: z.number(),
     name: z.string().nullable(),
     position: z.number().nullable(),
-  }),
-] as const;
+  })
+);
 
-export const moduleItem = [
+export const moduleItem = FragmentUtil.create(
   gql`
     fragment ModuleItemFragment on ModuleItem {
       id: _id
@@ -43,10 +43,10 @@ export const moduleItem = [
   z.object({
     id: z.number(),
     url: z.string().url().nullable(),
-  }),
-] as const;
+  })
+);
 
-export const subHeader = [
+export const subHeader = FragmentUtil.create(
   gql`
     fragment SubHeaderFragment on SubHeader {
       title
@@ -54,10 +54,10 @@ export const subHeader = [
   `,
   z.object({
     title: z.string().nullable(),
-  }),
-] as const;
+  })
+);
 
-export const page = [
+export const page = FragmentUtil.create(
   gql`
     fragment PageFragment on Page {
       id: _id
@@ -71,10 +71,10 @@ export const page = [
     title: z.string().nullable(),
     createdAt: z.date().nullable(),
     updatedAt: z.date().nullable(),
-  }),
-] as const;
+  })
+);
 
-export const file = [
+export const file = FragmentUtil.create(
   gql`
     fragment FileFragment on File {
       id: _id
@@ -86,10 +86,10 @@ export const file = [
     id: z.number(),
     contentType: z.string().nullable(),
     url: z.string().url().nullable(),
-  }),
-] as const;
+  })
+);
 
-export const extTool = [
+export const extTool = FragmentUtil.create(
   gql`
     fragment ExtToolFragment on ExternalTool {
       id: _id
@@ -103,12 +103,11 @@ export const extTool = [
     name: z.string().nullable(),
     description: z.string().nullable(),
     url: z.string().url().nullable(),
-  }),
-] as const;
+  })
+);
 
-export const discussion = FragmentUtil.compose([file], ([file]) => {
-  const [fileGQL, fileVal] = file;
-  return [
+export const discussion = FragmentUtil.compose([file], ([[fileGQL, fileVal]]) =>
+  FragmentUtil.create(
     gql`
       ${fileGQL}
       fragment DiscussionFragment on Discussion {
@@ -161,11 +160,11 @@ export const discussion = FragmentUtil.compose([file], ([file]) => {
             .nullable(),
         })
         .nullable(),
-    }),
-  ] as const;
-});
+    })
+  )
+);
 
-export const quiz = [
+export const quiz = FragmentUtil.create(
   gql`
     fragment QuizFragment on Quiz {
       id: _id
@@ -177,10 +176,10 @@ export const quiz = [
     id: z.number(),
     createdAt: z.date().nullable(),
     updatedAt: z.date().nullable(),
-  }),
-] as const;
+  })
+);
 
-export const extUrl = [
+export const extUrl = FragmentUtil.create(
   gql`
     fragment ExtUrlFragment on ExternalUrl {
       id: _id
@@ -192,10 +191,10 @@ export const extUrl = [
     id: z.number(),
     title: z.string().nullable(),
     extUrl: z.string().url().nullable(),
-  }),
-] as const;
+  })
+);
 
-export const moduleExtTool = [
+export const moduleExtTool = FragmentUtil.create(
   gql`
     fragment ModuleExtToolFragment on ModuleExternalTool {
       id: _id
@@ -205,10 +204,10 @@ export const moduleExtTool = [
   z.object({
     id: z.number(),
     modUrl: z.string().url().nullable(),
-  }),
-] as const;
+  })
+);
 
-export const rubric = [
+export const rubric = FragmentUtil.create(
   gql`
     fragment RubricFragment on Rubric {
       id: _id
@@ -234,13 +233,11 @@ export const rubric = [
         points: z.number().nullable(),
       })
       .array(),
-  }),
-] as const;
+  })
+);
 
-export const submission = FragmentUtil.compose([file], ([file]) => {
-  const [fileGQL, fileVal] = file;
-
-  return [
+export const submission = FragmentUtil.compose([file], ([[fileGQL, fileVal]]) =>
+  FragmentUtil.create(
     gql`
       ${fileGQL}
       fragment SubmissionFragment on Submission {
@@ -277,17 +274,14 @@ export const submission = FragmentUtil.compose([file], ([file]) => {
         .enum(["late", "missing", "extended", "none"])
         .nullable(),
       attachment: fileVal.nullable(),
-    }),
-  ];
-});
+    })
+  )
+);
 
 export const assignment = FragmentUtil.compose(
   [rubric, submission],
-  ([rubricFrag, fileFrag]) => {
-    const [rubricGQL, rubricVal] = rubricFrag;
-    const [submissionGQL, submissionVal] = fileFrag;
-
-    return [
+  ([[rubricGQL, rubricVal], [submissionGQL, submissionVal]]) =>
+    FragmentUtil.create(
       gql`
         ${rubricGQL}
         ${submissionGQL}
@@ -341,12 +335,11 @@ export const assignment = FragmentUtil.compose(
             grades: submissionVal.nullable().array().nullable(),
           })
           .nullable(),
-      }),
-    ] as const;
-  }
+      })
+    )
 );
 
-export const grades = [
+export const grades = FragmentUtil.create(
   gql`
     fragment GradesFragment on Grades {
       currentGrade
@@ -368,5 +361,5 @@ export const grades = [
     unpostedCurrentScore: z.number().nullable(),
     unpostedFinalGrade: z.string().nullable(),
     unpostedFinalScore: z.number().nullable(),
-  }),
-] as const;
+  })
+);
