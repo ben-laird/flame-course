@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-type Query<ZVal extends z.Schema, Params = null> = Readonly<
+// const emptyFunction = () => undefined;
+// type Empty = Parameters<typeof emptyFunction>;
+// Can use this (^) to model a function with no arguments
+
+type Query<ZVal extends z.Schema, Params extends GQLParams = null> = Readonly<
   [(variables: Params) => Readonly<[string, Params]>, ZVal]
 >;
 
@@ -13,8 +17,16 @@ type FragsParams<FragVal extends z.Schema> = [
 
 type GQLParams = Record<string, string | number> | null;
 
-const createFragment = <ZVal extends z.Schema>(...fragment: Fragment<ZVal>) =>
-  fragment;
+export const createFragment = <ZVal extends z.Schema>(
+  ...fragment: Fragment<ZVal>
+) => fragment;
+
+export const createQuery = <
+  ZVal extends z.Schema,
+  Params extends GQLParams = null
+>(
+  ...query: Query<ZVal, Params>
+) => query;
 
 const applyFragments = <
   Frags extends FragsParams<z.Schema>,
@@ -33,8 +45,4 @@ const composeFragments = <
   builder: (frags: Frags) => Fragment<OutVal>
 ) => builder(frags);
 
-export {
-  createFragment as create,
-  applyFragments as apply,
-  composeFragments as compose,
-};
+export { applyFragments as apply, composeFragments as compose };
