@@ -6,12 +6,12 @@ import { FragmentConst } from ".";
 export const modelProvider = new CanvasProvider(
   ...FragmentUtil.apply(
     [FragmentConst.course, FragmentConst.module, FragmentConst.moduleItem],
-    ([courseFrag, moduleFrag, moduleItemFrag]) => {
-      const [courseGQL, courseVal] = courseFrag;
-      const [moduleGQL, moduleVal] = moduleFrag;
-      const [moduleItemGQL, moduleItemVal] = moduleItemFrag;
-
-      return [
+    ([
+      [courseGQL, courseVal],
+      [moduleGQL, moduleVal],
+      [moduleItemGQL, moduleItemVal],
+    ]) =>
+      [
         (variables: { id: number }) => [
           gql`
             ${courseGQL}
@@ -64,7 +64,6 @@ export const modelProvider = new CanvasProvider(
               .array(),
           }),
         }),
-      ] as const;
-    }
+      ] as const
   )
 );
