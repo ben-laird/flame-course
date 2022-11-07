@@ -13,6 +13,9 @@ type FragsParams<FragVal extends z.Schema> = [
 
 type GQLParams = Record<string, string | number> | null;
 
+const createFragment = <ZVal extends z.Schema>(...fragment: Fragment<ZVal>) =>
+  fragment;
+
 const applyFragments = <
   Frags extends FragsParams<z.Schema>,
   OutVal extends z.Schema,
@@ -30,4 +33,8 @@ const composeFragments = <
   builder: (frags: Frags) => Fragment<OutVal>
 ) => builder(frags);
 
-export { applyFragments as apply, composeFragments as compose };
+export {
+  createFragment as create,
+  applyFragments as apply,
+  composeFragments as compose,
+};
