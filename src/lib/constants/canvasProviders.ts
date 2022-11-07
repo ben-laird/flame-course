@@ -11,7 +11,7 @@ export const modelProvider = new CanvasProvider(
       [moduleGQL, moduleVal],
       [moduleItemGQL, moduleItemVal],
     ]) =>
-      [
+      FragmentUtil.createQuery(
         (variables: { id: number }) => [
           gql`
             ${courseGQL}
@@ -63,7 +63,7 @@ export const modelProvider = new CanvasProvider(
               })
               .array(),
           }),
-        }),
-      ] as const
+        })
+      )
   )
 );
