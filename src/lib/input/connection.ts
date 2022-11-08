@@ -5,6 +5,11 @@ export type AnyConnection = Connection<Readonly<any[]>, any, z.Schema, any>;
 
 export type ConnectionInputParams = Record<string, string | number> | null;
 
+export type ConnectionTransformer<
+  ConnectParams extends ReadonlyArray<unknown>,
+  Params extends ConnectionInputParams = null
+> = ((variables: Params) => ConnectParams) | (() => ConnectParams);
+
 export type ConnectionInfer<
   T extends AnyConnection,
   U extends "inputParams" | "connectParams" | "val" | "output"
@@ -38,7 +43,7 @@ export default abstract class Connection<
   };
 
   constructor(
-    protected transformer: (params: InputParams) => ConnectParams,
+    protected transformer: ConnectionTransformer<ConnectParams, InputParams>,
     protected validator: ZVal
   ) {}
 }
