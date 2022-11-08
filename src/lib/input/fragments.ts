@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ConnectionInputParams, ConnectionTransformer } from "./connection";
 
 // const emptyFunction = () => undefined;
 // type Empty = Parameters<typeof emptyFunction>;
@@ -27,6 +28,13 @@ export const createQuery = <
 >(
   ...query: Query<ZVal, Params>
 ) => query;
+
+export const createTransformer = <
+  ConnectParams extends ReadonlyArray<unknown>,
+  Params extends ConnectionInputParams = null
+>(
+  transformer: ConnectionTransformer<ConnectParams, Params>
+) => transformer;
 
 const applyFragments = <
   Frags extends FragsParams<z.Schema>,
