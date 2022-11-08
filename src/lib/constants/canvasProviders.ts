@@ -17,7 +17,7 @@ export const modelProvider = new CanvasProvider(
             ${courseGQL}
             ${moduleGQL}
             ${moduleItemGQL}
-            query modelQ($id: ID!) {
+            query ModelProvider($id: ID!) {
               Model: legacyNode(_id: $id, type: User) {
                 ... on User {
                   enrollments {
