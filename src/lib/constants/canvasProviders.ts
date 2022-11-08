@@ -67,3 +67,23 @@ export const modelProvider = new CanvasProvider(
       )
   )
 );
+
+export const idsProvider = new CanvasProvider(
+  () => [
+    gql`
+      query IdsProvider {
+        courses: allCourses {
+          id: _id
+        }
+      }
+    `,
+  ],
+  z.object({
+    courses: z
+      .object({
+        id: z.number(),
+      })
+      .array()
+      .nullable(),
+  })
+);
