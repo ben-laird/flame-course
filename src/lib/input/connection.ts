@@ -3,6 +3,8 @@ import { z } from "zod";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyConnection = Connection<Readonly<any[]>, any, z.Schema, any>;
 
+export type ConnectionInputParams = Record<string, string | number> | null;
+
 export type ConnectionInfer<
   T extends AnyConnection,
   U extends "inputParams" | "connectParams" | "val" | "output"
@@ -19,8 +21,6 @@ export type ConnectionInfer<
       output: Output;
     }[U]
   : never;
-
-export type ConnectionInputParams = Record<string, string | number> | null;
 
 export default abstract class Connection<
   ConnectParams extends ReadonlyArray<unknown>,
