@@ -24,7 +24,7 @@ export const createFragment = <ZVal extends z.Schema>(
 
 export const createQuery = <
   ZVal extends z.Schema,
-  Params extends GQLParams = null
+  Params extends ConnectionInputParams = null
 >(
   ...query: Query<ZVal, Params>
 ) => query;
@@ -39,7 +39,7 @@ export const createTransformer = <
 const applyFragments = <
   Frags extends FragsParams<z.Schema>,
   OutVal extends z.Schema,
-  Params extends GQLParams = null
+  Params extends ConnectionInputParams = null
 >(
   frags: Frags,
   builder: (frags: Frags) => Query<OutVal, Params>
