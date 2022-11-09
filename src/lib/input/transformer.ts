@@ -4,6 +4,11 @@ import { AnyConnection, ConnectionInfer } from "./connection";
  * Transform data from a connection into a useable piece of data
  */
 export default class Transformer<Return, Con extends AnyConnection> {
+  /**
+   * Transform data from a connection into a useable piece of data
+   * @param connection the connection to use
+   * @param transform the function to use when transforming incoming data. The `data` parameter is fully typed.
+   */
   constructor(
     /**
      * The connection to use
