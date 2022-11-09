@@ -3,6 +3,9 @@ import { z } from "zod";
 import { FragmentUtil } from "../input";
 import { subjectCodesVal } from "./subjects";
 
+/**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for a course.
+ */
 export const course = FragmentUtil.createFragment(
   gql`
     fragment CourseFragment on Course {
@@ -18,6 +21,9 @@ export const course = FragmentUtil.createFragment(
   })
 );
 
+/**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for a module.
+ */
 export const module = FragmentUtil.createFragment(
   gql`
     fragment ModuleFragment on Module {
@@ -33,6 +39,9 @@ export const module = FragmentUtil.createFragment(
   })
 );
 
+/**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for a module item.
+ */
 export const moduleItem = FragmentUtil.createFragment(
   gql`
     fragment ModuleItemFragment on ModuleItem {
@@ -46,6 +55,9 @@ export const moduleItem = FragmentUtil.createFragment(
   })
 );
 
+/**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for a subheader.
+ */
 export const subHeader = FragmentUtil.createFragment(
   gql`
     fragment SubHeaderFragment on SubHeader {
@@ -57,6 +69,9 @@ export const subHeader = FragmentUtil.createFragment(
   })
 );
 
+/**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for a page.
+ */
 export const page = FragmentUtil.createFragment(
   gql`
     fragment PageFragment on Page {
@@ -74,6 +89,9 @@ export const page = FragmentUtil.createFragment(
   })
 );
 
+/**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for a file.
+ */
 export const file = FragmentUtil.createFragment(
   gql`
     fragment FileFragment on File {
@@ -89,6 +107,9 @@ export const file = FragmentUtil.createFragment(
   })
 );
 
+/**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for an external tool.
+ */
 export const extTool = FragmentUtil.createFragment(
   gql`
     fragment ExtToolFragment on ExternalTool {
@@ -106,6 +127,9 @@ export const extTool = FragmentUtil.createFragment(
   })
 );
 
+/**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for a discussion.
+ */
 export const discussion = FragmentUtil.compose([file], ([[fileGQL, fileVal]]) =>
   FragmentUtil.createFragment(
     gql`
@@ -164,6 +188,9 @@ export const discussion = FragmentUtil.compose([file], ([[fileGQL, fileVal]]) =>
   )
 );
 
+/**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for a quiz.
+ */
 export const quiz = FragmentUtil.createFragment(
   gql`
     fragment QuizFragment on Quiz {
@@ -179,6 +206,9 @@ export const quiz = FragmentUtil.createFragment(
   })
 );
 
+/**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for an external URL.
+ */
 export const extUrl = FragmentUtil.createFragment(
   gql`
     fragment ExtUrlFragment on ExternalUrl {
@@ -194,6 +224,9 @@ export const extUrl = FragmentUtil.createFragment(
   })
 );
 
+/**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for a module's external tool.
+ */
 export const moduleExtTool = FragmentUtil.createFragment(
   gql`
     fragment ModuleExtToolFragment on ModuleExternalTool {
@@ -207,6 +240,9 @@ export const moduleExtTool = FragmentUtil.createFragment(
   })
 );
 
+/**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for a rubric.
+ */
 export const rubric = FragmentUtil.createFragment(
   gql`
     fragment RubricFragment on Rubric {
@@ -236,6 +272,9 @@ export const rubric = FragmentUtil.createFragment(
   })
 );
 
+/**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for a submission.
+ */
 export const submission = FragmentUtil.compose([file], ([[fileGQL, fileVal]]) =>
   FragmentUtil.createFragment(
     gql`
@@ -278,6 +317,9 @@ export const submission = FragmentUtil.compose([file], ([[fileGQL, fileVal]]) =>
   )
 );
 
+/**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for an assignment.
+ */
 export const assignment = FragmentUtil.compose(
   [rubric, submission],
   ([[rubricGQL, rubricVal], [submissionGQL, submissionVal]]) =>
@@ -339,6 +381,9 @@ export const assignment = FragmentUtil.compose(
     )
 );
 
+/**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for a grade or a set of grades.
+ */
 export const grades = FragmentUtil.createFragment(
   gql`
     fragment GradesFragment on Grades {

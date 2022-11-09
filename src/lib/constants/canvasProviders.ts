@@ -3,6 +3,9 @@ import { z } from "zod";
 import { CanvasProvider, FragmentUtil } from "../input";
 import { FragmentConst } from ".";
 
+/**
+ * A pre-fabricated provider for creating a Model.
+ */
 export const modelProvider = new CanvasProvider(
   ...FragmentUtil.apply(
     [FragmentConst.course, FragmentConst.module, FragmentConst.moduleItem],
@@ -68,6 +71,9 @@ export const modelProvider = new CanvasProvider(
   )
 );
 
+/**
+ * A pre-fabricated provider for obtaining course identifiers.
+ */
 export const idsProvider = new CanvasProvider(
   () => [
     gql`

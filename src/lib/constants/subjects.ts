@@ -1,7 +1,13 @@
 import { z } from "zod";
 
+/**
+ * The code for a course subject
+ */
 export type SubjectCode = keyof typeof Subject;
 
+/**
+ * An enumeration of subject codes and subject
+ */
 export enum Subject {
   ACCT = "Accounting",
   ADCN = "Addiction Counseling",
@@ -195,6 +201,9 @@ export enum Subject {
   YOUT = "Youth", // 190
 }
 
+/**
+ * A constant array of subject codes
+ */
 export const subjectCodes = [
   "ACCT",
   "ADCN",
@@ -388,4 +397,7 @@ export const subjectCodes = [
   "YOUT", // 190
 ] as const;
 
+/**
+ * A pre-fabricated Zod validator for subject codes
+ */
 export const subjectCodesVal = z.enum(subjectCodes);
