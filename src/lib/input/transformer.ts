@@ -10,13 +10,7 @@ export default class Transformer<Return, Con extends AnyConnection> {
    * @param transform the function to use when transforming incoming data. The `data` parameter is fully typed.
    */
   constructor(
-    /**
-     * The connection to use
-     */
     private connection: Con,
-    /**
-     * The function to use when transforming incoming data. the `data` parameter is fully typed.
-     */
     private transform: (data: ConnectionInfer<Con, "output">) => Return
   ) {}
 
