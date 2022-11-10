@@ -14,11 +14,9 @@ export default abstract class SchemaNode<
   ZVal extends z.Schema,
   Shape extends z.infer<ZVal> = z.infer<ZVal>
 > {
-  constructor(
-    protected deps: Deps,
-    protected val: ZVal,
-    protected data: Shape
-  ) {
-    val.parse(data);
+  protected data: Shape;
+
+  constructor(protected deps: Deps, protected val: ZVal, data: Shape) {
+    this.data = val.parse(data) as Shape;
   }
 }
