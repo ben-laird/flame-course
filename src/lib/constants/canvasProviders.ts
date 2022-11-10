@@ -1,18 +1,40 @@
 import { gql } from "graphql-request";
 import { z } from "zod";
 import { CanvasProvider, FragmentUtil } from "../input";
-import { FragmentConst } from ".";
+import { FragmentConst as C } from ".";
 
 /**
  * A pre-fabricated provider for creating a Model.
  */
 export const modelProvider = new CanvasProvider(
   ...FragmentUtil.apply(
-    [FragmentConst.course, FragmentConst.module, FragmentConst.moduleItem],
+    [
+      C.course,
+      C.module,
+      C.moduleItem,
+      C.subHeader,
+      C.page,
+      C.assignment,
+      C.file,
+      C.extUrl,
+      C.moduleExtTool,
+      C.extTool,
+      C.discussion,
+      C.quiz,
+    ],
     ([
       [courseGQL, courseVal],
       [moduleGQL, moduleVal],
       [moduleItemGQL, moduleItemVal],
+      [subHeaderGQL, subHeaderVal],
+      [pageGQL, pageVal],
+      [assignmentGQL, assignmentVal],
+      [fileGQL, fileVal],
+      [extUrlGQL, extUrlVal],
+      [moduleExtToolGQL, moduleExtToolVal],
+      [extToolGQL, extToolVal],
+      [discussionGQL, discussionVal],
+      [quizGQL, quizVal],
     ]) =>
       FragmentUtil.createQuery(
         (variables: { id: number }) => [
@@ -20,6 +42,15 @@ export const modelProvider = new CanvasProvider(
             ${courseGQL}
             ${moduleGQL}
             ${moduleItemGQL}
+            ${subHeaderGQL}
+            ${pageGQL}
+            ${assignmentGQL}
+            ${fileGQL}
+            ${extUrlGQL}
+            ${moduleExtToolGQL}
+            ${extToolGQL}
+            ${discussionGQL}
+            ${quizGQL}
             query ModelProvider($id: ID!) {
               Model: legacyNode(_id: $id, type: User) {
                 ... on User {
@@ -32,6 +63,17 @@ export const modelProvider = new CanvasProvider(
                           ...ModuleFragment
                           items: moduleItems {
                             ...ModuleItemFragment
+                            content {
+                              ...SubHeaderFragment
+                              ...PageFragment
+                              ...AssignmentFragment
+                              ...FileFragment
+                              ...ExtUrlFragment
+                              ...ModuleExtToolFragment
+                              ...ExtToolFragment
+                              ...DiscussionFragment
+                              ...QuizFragment
+                            }
                           }
                         }
                       }
@@ -54,7 +96,24 @@ export const modelProvider = new CanvasProvider(
                       .object({
                         modules: moduleVal
                           .extend({
-                            items: moduleItemVal.array().nullable(),
+                            items: moduleItemVal
+                              .extend({
+                                content: z
+                                  .union([
+                                    subHeaderVal,
+                                    pageVal,
+                                    assignmentVal,
+                                    fileVal,
+                                    extUrlVal,
+                                    moduleExtToolVal,
+                                    extToolVal,
+                                    discussionVal,
+                                    quizVal,
+                                  ])
+                                  .nullable(),
+                              })
+                              .array()
+                              .nullable(),
                           })
                           .nullable()
                           .array()
