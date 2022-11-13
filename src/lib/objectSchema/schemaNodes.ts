@@ -31,7 +31,7 @@ export abstract class SchemaLinkedNode<
   public get wrappedDataAndDependencies() {
     const { data, dependencies } = this;
 
-    return { data, dependencies };
+    return [data, dependencies];
   }
 
   public get dependencies() {
