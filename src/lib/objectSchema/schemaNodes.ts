@@ -43,4 +43,6 @@ export abstract class SchemaLinkedNode<
 
     return this;
   };
+
+  public pop = (section: keyof Deps) => this.deps[section].pop();
 }
