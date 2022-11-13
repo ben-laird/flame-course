@@ -12,6 +12,8 @@ export abstract class SchemaNode<Shape extends Record<string, unknown>> {
   public get wrappedData() {
     return this.data;
   }
+
+  public abstract get id(): number;
 }
 
 type AnyDependencies = Record<string, AnySchemaNode[]>;
