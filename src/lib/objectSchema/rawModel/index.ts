@@ -1,9 +1,13 @@
 export { default as Assignment } from "./assignment";
+export { default as Course } from "./course";
 export { default as Discussion } from "./discussion";
 export { default as ExternalTool } from "./externalTool";
 export { default as ExternalUrl } from "./externalUrl";
 export { default as File } from "./file";
+export { default as Module } from "./module";
 export { default as ModuleExternalTool } from "./moduleExternalTool";
+export { default as ModuleItem } from "./moduleItem";
 export { default as Page } from "./page";
 export { default as Quiz } from "./quiz";
+export { default as RawModel } from "./rawModel";
 export { default as SubHeader } from "./subHeader";
