@@ -1,4 +1,4 @@
-import { AnyConnection, ConnectionInfer } from "./connection";
+import { AnyConnection, ConnectionInfer } from "../input/connection";
 
 /**
  * Transform data from a connection into a useable piece of data
