@@ -3,15 +3,15 @@ import { AnyConnection, ConnectionInfer } from "../input/connection";
 /**
  * Transform data from a connection into a useable piece of data
  */
-export default class Transformer<Return, Con extends AnyConnection> {
+export default class ProviderMediator<Return, Con extends AnyConnection> {
   /**
    * Transform data from a connection into a useable piece of data
    * @param connection the connection to use
-   * @param transform the function to use when transforming incoming data. The `data` parameter is fully typed.
+   * @param mediator the function to use when transforming incoming data. The `data` parameter is fully typed.
    */
   constructor(
     private connection: Con,
-    private transform: (data: ConnectionInfer<Con, "output">) => Return
+    private mediator: (data: ConnectionInfer<Con, "output">) => Return
   ) {}
 
   /**
@@ -21,6 +21,6 @@ export default class Transformer<Return, Con extends AnyConnection> {
    */
   public create = async (params: ConnectionInfer<Con, "inputParams">) => {
     const res = await this.connection.call(params);
-    return this.transform(res);
+    return this.mediator(res);
   };
 }
