@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { assignment } from "../constants";
-import { SchemaNode } from "./schemaNodes";
+import { assignment } from "../../constants";
+import { SchemaNode } from "../schemaNodes";
 
 type AssignmentShape = z.infer<typeof assignment[1]>;
 
