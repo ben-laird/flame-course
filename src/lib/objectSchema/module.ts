@@ -1,11 +1,16 @@
-import Assignment from "./assignment";
+import { z } from "zod";
+import { module } from "../constants";
+import ModuleItem from "./moduleItem";
+import { SchemaLinkedNode } from "./schemaNodes";
 
-// TODO Fully implement Module class
+type ModuleShape = z.infer<typeof module[1]>;
 
-/**
- * A representation of a typical Canvas module
- */
-export default interface Module {
-  assignments?: Array<Assignment>;
-  files?: Array<string>;
+type ModuleDeps = {
+  moduleItems: ModuleItem[];
+};
+
+export default class Module extends SchemaLinkedNode<ModuleShape, ModuleDeps> {
+  public get id(): number {
+    return this.data.id;
+  }
 }
