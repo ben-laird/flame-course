@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { module } from "../constants";
+import { module } from "../../constants";
 import ModuleItem from "./moduleItem";
-import { SchemaLinkedNode } from "./schemaNodes";
+import { SchemaLinkedNode } from "../schemaNodes";
 
 type ModuleShape = z.infer<typeof module[1]>;
 

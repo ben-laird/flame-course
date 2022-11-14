@@ -1,5 +1,5 @@
 import Course from "./course";
-import { SchemaLinkedNode } from "./schemaNodes";
+import { SchemaLinkedNode } from "../schemaNodes";
 
 type RawModelShape = { id: number };
 

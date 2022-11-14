@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { discussion } from "../constants";
-import * as MIC from "./moduleItemContents";
-import { SchemaLinkedNode } from "./schemaNodes";
+import { discussion } from "../../constants";
+import * as MIC from ".";
+import { SchemaLinkedNode } from "../schemaNodes";
 
 type ModuleItemShape = z.infer<typeof discussion[1]>;
 

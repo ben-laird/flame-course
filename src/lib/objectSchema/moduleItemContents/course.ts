@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { module } from "../constants";
+import { module } from "../../constants";
 import Module from "./module";
-import { SchemaLinkedNode } from "./schemaNodes";
+import { SchemaLinkedNode } from "../schemaNodes";
 
 type CourseShape = z.infer<typeof module[1]>;
 
