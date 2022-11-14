@@ -1,4 +1,4 @@
-type AnySchemaNode = SchemaNode<Record<string, unknown>>;
+export type AnySchemaNode = SchemaNode<Record<string, unknown>>;
 
 export type SchemaNodeInfer<T extends AnySchemaNode> = T extends SchemaNode<
   infer Shape
