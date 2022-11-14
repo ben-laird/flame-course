@@ -1,48 +1,33 @@
-// TODO Figure out what to do with assignments
+import { z } from "zod";
+import { assignment } from "../constants";
+import { SchemaNode } from "./schemaNodes";
 
-/**
- * A representation of an assignment seen on Canvas.
- */
-export default class Assignment {
-  /**
-   * The name of the assignment, seen at the top-level header
-   */
-  name: string;
-  /**
-   * The total amount of points this assignment is worth,
-   * typically out of the total points for the class.
-   */
-  totalPoints: number;
-  /**
-   * The number of points scored for the work done on the assignment.
-   * This is optional to allow for adding the score in later on.
-   */
-  score?: number;
-  /**
-   * The date the assignment is due as listed on Canvas, if any.
-   */
-  dueDate?: Date;
-  /**
-   * The description of the assignment as listed on Canvas, if any.
-   */
-  description?: string;
-  /**
-   * The date the assignment was added to Canvas.
-   * This is optional to allow for adding the info later on.
-   */
-  addedDate?: Date;
+type AssignmentShape = z.infer<typeof assignment[1]>;
 
-  constructor(
-    name: string,
-    totalPoints: number,
-    dueDate?: Date,
-    details?: { score?: number; description?: string; addedDate?: Date }
-  ) {
-    this.name = name;
-    this.totalPoints = totalPoints;
-    this.dueDate = dueDate;
-    this.score = details?.score;
-    this.description = details?.description;
-    this.addedDate = details?.addedDate;
+export default class Assignment extends SchemaNode<AssignmentShape> {
+  public get id(): number {
+    return this.data.id;
+  }
+
+  public get info() {
+    const { id, name, description, state } = this.data;
+
+    return { id, name, description, state };
+  }
+
+  public get mostRecentScore() {
+    const out = this.data.submissions?.grades?.at(-1)?.score;
+    return out ? out : undefined;
+  }
+
+  public get percentage() {
+    const score = this.mostRecentScore;
+    const points = this.data.pointsPossible;
+
+    return score && points && points !== 0 ? score / points : undefined;
+  }
+
+  public get rubric() {
+    return this.data.rubric;
   }
 }
