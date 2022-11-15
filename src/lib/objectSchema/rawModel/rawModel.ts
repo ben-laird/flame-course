@@ -1,10 +1,10 @@
-import Course from "./course";
+import Enrollment from "./enrollment";
 import { SchemaLinkedNode } from "../schemaNodes";
 
 type RawModelShape = { id: number };
 
 type RawModelDeps = {
-  courses: Course[];
+  enrollments: Enrollment[];
 };
 
 export default class RawModel extends SchemaLinkedNode<

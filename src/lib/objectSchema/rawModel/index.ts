@@ -1,6 +1,7 @@
 export { default as Assignment } from "./assignment";
 export { default as Course } from "./course";
 export { default as Discussion } from "./discussion";
+export { default as Enrollment } from "./enrollment";
 export { default as ExternalTool } from "./externalTool";
 export { default as ExternalUrl } from "./externalUrl";
 export { default as File } from "./file";
