@@ -4,7 +4,7 @@ import { SchemaLinkedNode } from "../schemaNodes";
 type EnrollmentShape = { id: number };
 
 type EnrollmentDeps = {
-  courses: Course[];
+  course: [Course];
 };
 
 export default class Enrollment extends SchemaLinkedNode<
