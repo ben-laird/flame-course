@@ -61,10 +61,12 @@ export const moduleItem = FragmentUtil.createFragment(
 export const subHeader = FragmentUtil.createFragment(
   gql`
     fragment SubHeaderFragment on SubHeader {
+      type: __typename
       title
     }
   `,
   z.object({
+    type: z.literal("SubHeader"),
     title: z.string().nullable(),
   })
 );
@@ -75,6 +77,7 @@ export const subHeader = FragmentUtil.createFragment(
 export const page = FragmentUtil.createFragment(
   gql`
     fragment PageFragment on Page {
+      type: __typename
       id: _id
       title
       createdAt
@@ -82,6 +85,7 @@ export const page = FragmentUtil.createFragment(
     }
   `,
   z.object({
+    type: z.literal("Page"),
     id: z.number(),
     title: z.string().nullable(),
     createdAt: z.date().nullable(),
@@ -95,12 +99,14 @@ export const page = FragmentUtil.createFragment(
 export const file = FragmentUtil.createFragment(
   gql`
     fragment FileFragment on File {
+      type: __typename
       id: _id
       contentType
       url
     }
   `,
   z.object({
+    type: z.literal("File"),
     id: z.number(),
     contentType: z.string().nullable(),
     url: z.string().url().nullable(),
@@ -113,6 +119,7 @@ export const file = FragmentUtil.createFragment(
 export const extTool = FragmentUtil.createFragment(
   gql`
     fragment ExtToolFragment on ExternalTool {
+      type: __typename
       id: _id
       name
       description
@@ -120,6 +127,7 @@ export const extTool = FragmentUtil.createFragment(
     }
   `,
   z.object({
+    type: z.literal("ExternalTool"),
     id: z.number(),
     name: z.string().nullable(),
     description: z.string().nullable(),
@@ -135,6 +143,7 @@ export const discussion = FragmentUtil.compose([file], ([[fileGQL, fileVal]]) =>
     gql`
       ${fileGQL}
       fragment DiscussionFragment on Discussion {
+        type: __typename
         id: _id
         title
         entries: discussionEntriesConnection {
@@ -158,6 +167,7 @@ export const discussion = FragmentUtil.compose([file], ([[fileGQL, fileVal]]) =>
       }
     `,
     z.object({
+      type: z.literal("Discussion"),
       id: z.number(),
       title: z.string().nullable(),
       entries: z
@@ -194,12 +204,14 @@ export const discussion = FragmentUtil.compose([file], ([[fileGQL, fileVal]]) =>
 export const quiz = FragmentUtil.createFragment(
   gql`
     fragment QuizFragment on Quiz {
+      type: __typename
       id: _id
       createdAt
       updatedAt
     }
   `,
   z.object({
+    type: z.literal("Quiz"),
     id: z.number(),
     createdAt: z.date().nullable(),
     updatedAt: z.date().nullable(),
@@ -212,12 +224,14 @@ export const quiz = FragmentUtil.createFragment(
 export const extUrl = FragmentUtil.createFragment(
   gql`
     fragment ExtUrlFragment on ExternalUrl {
+      type: __typename
       id: _id
       title
       extUrl: url
     }
   `,
   z.object({
+    type: z.literal("ExternalUrl"),
     id: z.number(),
     title: z.string().nullable(),
     extUrl: z.string().url().nullable(),
@@ -230,11 +244,13 @@ export const extUrl = FragmentUtil.createFragment(
 export const moduleExtTool = FragmentUtil.createFragment(
   gql`
     fragment ModuleExtToolFragment on ModuleExternalTool {
+      type: __typename
       id: _id
       modUrl: url
     }
   `,
   z.object({
+    type: z.literal("ModuleExternalTool"),
     id: z.number(),
     modUrl: z.string().url().nullable(),
   })
@@ -328,6 +344,7 @@ export const assignment = FragmentUtil.compose(
         ${rubricGQL}
         ${submissionGQL}
         fragment AssignmentFragment on Assignment {
+          type: __typename
           id: _id
           name
           description
@@ -350,6 +367,7 @@ export const assignment = FragmentUtil.compose(
         }
       `,
       z.object({
+        type: z.literal("Assignment"),
         id: z.number(),
         name: z.string().nullable(),
         description: z.string().nullable(),
