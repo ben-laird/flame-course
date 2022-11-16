@@ -1,4 +1,5 @@
-import * as Schema from "./lib/objectSchema";
+// Types exports
+export * from "./types";
 
-export const FlameCourse = { ...Schema };
-export { Schema };
+// Library exports
+export * from "./lib";
