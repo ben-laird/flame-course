@@ -1,26 +1,16 @@
 import { z } from "zod";
-import { discussion } from "../../constants";
-import * as MIC from ".";
-import { SchemaLinkedNode } from "../schemaNodes";
+import { moduleItem } from "../../constants";
+import { AnySchemaNode, SchemaLinkedNode } from "../schemaNodes";
 
-type ModuleItemShape = z.infer<typeof discussion[1]>;
+type ModuleItemShape = z.infer<typeof moduleItem[1]>;
 
-type ModuleItemDeps = {
-  assignments: MIC.Assignment[];
-  discussions: MIC.Discussion[];
-  externalTools: MIC.ExternalTool[];
-  externalUrls: MIC.ExternalUrl[];
-  files: MIC.File[];
-  moduleExternalTools: MIC.ModuleExternalTool[];
-  pages: MIC.Page[];
-  quizzes: MIC.Quiz[];
-  subHeaders: MIC.SubHeader[];
+type ModuleItemDeps<Wrapped extends AnySchemaNode> = {
+  item: [Wrapped];
 };
 
-export default class ModuleItem extends SchemaLinkedNode<
-  ModuleItemShape,
-  ModuleItemDeps
-> {
+export default class ModuleItem<
+  Wrapped extends AnySchemaNode
+> extends SchemaLinkedNode<ModuleItemShape, ModuleItemDeps<Wrapped>> {
   public get id(): number {
     return this.data.id;
   }
