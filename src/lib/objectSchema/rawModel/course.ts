@@ -1,12 +1,12 @@
 import { z } from "zod";
-import { module } from "../../constants";
+import { course } from "../../constants";
 import Module from "./module";
 import { SchemaLinkedNode } from "../schemaNodes";
 
-type CourseShape = z.infer<typeof module[1]>;
+type CourseShape = z.infer<typeof course[1]>;
 
 type CourseDeps = {
-  moduleItems: Module[];
+  modules: Module[];
 };
 
 export default class Course extends SchemaLinkedNode<CourseShape, CourseDeps> {
