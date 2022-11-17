@@ -1,7 +1,7 @@
 import test from "ava";
 import { gql } from "graphql-request";
 import { z } from "zod";
-import { apply, compose } from "./fragments";
+import { FragmentUtil as Util } from ".";
 
 const courseFrag = [
   gql`
@@ -33,8 +33,45 @@ const sectionFrag = [
   }),
 ] as const;
 
+test("Creating a fragment", (t) => {
+  t.notThrows(() =>
+    Util.createFragment(
+      gql`
+        fragment CourseFrag on Course {
+          id: _id
+          name
+          state
+        }
+      `,
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        state: z.string(),
+      })
+    )
+  );
+});
+
+test("Creating a query", (t) => {
+  t.notThrows(() =>
+    Util.createQuery(
+      (variables: { id: number }) => ["memes", variables],
+      z.string()
+    )
+  );
+});
+
+test("Creating a transformer", (t) => {
+  t.notThrows(() =>
+    Util.createTransformer((variables: { index: number }) => [
+      ["memes", variables],
+      z.string(),
+    ])
+  );
+});
+
 test("Joining fragments together", (t) => {
-  const actualComposedFragments = compose([sectionFrag], (frags) => {
+  const actualComposedFragments = Util.compose([sectionFrag], (frags) => {
     const [section] = frags;
 
     const [gqlFragment, sectionVal] = section;
@@ -149,7 +186,7 @@ test("Applying a fragment to a base", (t) => {
     }
   `;
 
-  const actualBase = apply([courseFrag], (frags) => {
+  const actualBase = Util.apply([courseFrag], (frags) => {
     const [course] = frags;
 
     const [gqlFragment, courseVal] = course;
@@ -270,7 +307,7 @@ test("Applying multiple fragments to a base", (t) => {
     }
   `;
 
-  const actualBase = apply([courseFrag, sectionFrag], (frags) => {
+  const actualBase = Util.apply([courseFrag, sectionFrag], (frags) => {
     const [course, section] = frags;
 
     const [courseGqlFragment, courseVal] = course;
