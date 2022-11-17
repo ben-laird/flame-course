@@ -1,31 +1,31 @@
 import { z } from "zod";
 
 /**
- * A type for any possible connection. Use this in type parameters to specify any sort of connection that extends the Connection abstract class.
+ * A type for any possible connection. Use this in type parameters to specify any sort of connection that extends the Provider abstract class.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AnyConnection = Connection<Readonly<any[]>, any, z.Schema, any>;
+export type AnyProvider = Provider<Readonly<any[]>, any, z.Schema, any>;
 
 /**
  * A type specifying input parameters for a given connection
  */
-export type ConnectionInputParams = Record<string, string | number> | null;
+export type ProviderInputParams = Record<string, string | number> | null;
 
 /**
- * A type specifying the expected shape of a request factory, aka a Connection transformer.
+ * A type specifying the expected shape of a request factory, aka a Provider transformer.
  */
-export type ConnectionTransformer<
+export type ProviderTransformer<
   ConnectParams extends ReadonlyArray<unknown>,
-  Params extends ConnectionInputParams = null
+  Params extends ProviderInputParams = null
 > = ((variables: Params) => ConnectParams) | (() => ConnectParams);
 
 /**
- * Infer the properties of a connection, i.e. any class that extends the Connection abstract class
+ * Infer the properties of a connection, i.e. any class that extends the Provider abstract class
  */
-export type ConnectionInfer<
-  T extends AnyConnection,
+export type ProviderInfer<
+  T extends AnyProvider,
   U extends "inputParams" | "connectParams" | "val" | "output"
-> = T extends Connection<
+> = T extends Provider<
   infer ConnectParams,
   infer Output,
   infer ZVal,
@@ -42,11 +42,11 @@ export type ConnectionInfer<
 /**
  * An abstract class representing a connection to an API endpoint, database, or other source of data.
  */
-export default abstract class Connection<
+export default abstract class Provider<
   ConnectParams extends ReadonlyArray<unknown>,
   OutShape extends z.infer<ZVal>,
   ZVal extends z.Schema,
-  InputParams extends ConnectionInputParams = null
+  InputParams extends ProviderInputParams = null
 > {
   protected abstract connect: (...params: ConnectParams) => Promise<OutShape>;
 
@@ -66,7 +66,7 @@ export default abstract class Connection<
     /**
      * A factory function/transformer to produce a query to send to the data source
      */
-    protected transformer: ConnectionTransformer<ConnectParams, InputParams>,
+    protected transformer: ProviderTransformer<ConnectParams, InputParams>,
     /**
      * A Zod validator indicating the expected shape of the response
      */
