@@ -1,9 +1,9 @@
-import { AnyConnection, ConnectionInfer } from "../input/connection";
+import { AnyProvider, ProviderInfer } from "../input/provider";
 
 /**
  * Transform data from a connection into a useable piece of data
  */
-export default class ProviderMediator<Return, Con extends AnyConnection> {
+export default class ProviderMediator<Return, Con extends AnyProvider> {
   /**
    * Transform data from a connection into a useable piece of data
    * @param connection the connection to use
@@ -11,7 +11,7 @@ export default class ProviderMediator<Return, Con extends AnyConnection> {
    */
   constructor(
     private connection: Con,
-    private mediator: (data: ConnectionInfer<Con, "output">) => Return
+    private mediator: (data: ProviderInfer<Con, "output">) => Return
   ) {}
 
   /**
@@ -19,7 +19,7 @@ export default class ProviderMediator<Return, Con extends AnyConnection> {
    * @param params parameters needed to call for data from the connection
    * @returns a transformed data set using the `transform` function
    */
-  public create = async (params: ConnectionInfer<Con, "inputParams">) => {
+  public create = async (params: ProviderInfer<Con, "inputParams">) => {
     const res = await this.connection.call(params);
     return this.mediator(res);
   };

@@ -1,12 +1,12 @@
 import { z } from "zod";
-import { ConnectionInputParams, ConnectionTransformer } from "./connection";
+import { ProviderInputParams, ProviderTransformer } from "./provider";
 
 /**
  * A type specifying the shape of a GraphQL query factory with a Zod validator attached
  */
 type Query<
   ZVal extends z.Schema,
-  Params extends ConnectionInputParams = null
+  Params extends ProviderInputParams = null
 > = Readonly<[(variables: Params) => Readonly<[string, Params]>, ZVal]>;
 
 /**
@@ -38,7 +38,7 @@ export const createFragment = <ZVal extends z.Schema>(
  */
 export const createQuery = <
   ZVal extends z.Schema,
-  Params extends ConnectionInputParams = null
+  Params extends ProviderInputParams = null
 >(
   ...query: Query<ZVal, Params>
 ) => query;
@@ -51,9 +51,9 @@ export const createQuery = <
  */
 export const createTransformer = <
   ConnectParams extends ReadonlyArray<unknown>,
-  Params extends ConnectionInputParams = null
+  Params extends ProviderInputParams = null
 >(
-  transformer: ConnectionTransformer<ConnectParams, Params>
+  transformer: ProviderTransformer<ConnectParams, Params>
 ) => transformer;
 
 /**
@@ -65,7 +65,7 @@ export const createTransformer = <
 const applyFragments = <
   Frags extends FragsParams<z.Schema>,
   OutVal extends z.Schema,
-  Params extends ConnectionInputParams = null
+  Params extends ProviderInputParams = null
 >(
   frags: Frags,
   builder: (frags: Frags) => Query<OutVal, Params>

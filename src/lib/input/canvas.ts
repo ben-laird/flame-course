@@ -1,23 +1,21 @@
 import { GraphQLClient } from "graphql-request";
 import { z } from "zod";
-import Connection, { ConnectionInputParams } from "./connection";
+import Provider, { ProviderInputParams } from "./provider";
 
 /**
  * Parameters required to send a request to the endpoint
  */
-type ConnectParams = Readonly<
-  [query: string, variables?: ConnectionInputParams]
->;
+type ConnectParams = Readonly<[query: string, variables?: ProviderInputParams]>;
 
 /**
  * A connection for the Canvas GraphQL API. This will send a GraphQL query to an endpoint specified in the constructor, defaulting to `canvas.liberty.edu`.
  * This also stores a bearer token which can also be specified in the constructor; the default is what is found in the `CANVAS_AUTH_TOKEN` environment variable.
  */
-export default class Canvas<
+export default class CanvasProvider<
   ZVal extends z.Schema,
-  InputParams extends ConnectionInputParams = null,
+  InputParams extends ProviderInputParams = null,
   OutShape extends z.infer<ZVal> = z.infer<ZVal>
-> extends Connection<ConnectParams, OutShape, ZVal, InputParams> {
+> extends Provider<ConnectParams, OutShape, ZVal, InputParams> {
   private endpoint = "https://canvas.liberty.edu/api/graphql";
 
   private token = process.env.CANVAS_AUTH_TOKEN;
