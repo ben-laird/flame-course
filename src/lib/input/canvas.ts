@@ -29,10 +29,7 @@ export default class Canvas<
       "authorization",
       `Bearer ${this.token}`
     );
-    return client.request<OutShape>(
-      query,
-      variables !== null ? variables : undefined
-    );
+    return client.request<OutShape>(query, variables ? variables : undefined);
   };
 
   constructor(
