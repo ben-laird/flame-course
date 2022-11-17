@@ -18,7 +18,7 @@ export default class Canvas<
   InputParams extends ConnectionInputParams = null,
   OutShape extends z.infer<ZVal> = z.infer<ZVal>
 > extends Connection<ConnectParams, OutShape, ZVal, InputParams> {
-  private endpoint = "canvas.liberty.edu";
+  private endpoint = "https://canvas.liberty.edu/api/graphql";
 
   private token = process.env.CANVAS_AUTH_TOKEN;
 
