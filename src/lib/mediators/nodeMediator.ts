@@ -1,4 +1,4 @@
-import { UnaryVariadic } from "../../types/utils";
+import { UnaryVariadic } from "../utils";
 import { AnySchemaNode } from "../objectSchema/schemaNodes";
 
 /**
