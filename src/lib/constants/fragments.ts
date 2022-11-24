@@ -71,8 +71,42 @@ export const course = FragmentUtil.createFragment(
   `,
   z.object({
     id: z.number(),
-    name: z.string(),
-    courseCode: subjectCodesVal.nullable(),
+    name: z
+      .string()
+      .regex(/\w{4}\d{3}: .+? \(\d{3}\)/)
+      .transform((input) => {
+        const matches = input.match(/(\w{4})(\d{3}): (.+?) \((\d{3})\)/);
+
+        return matches
+          ? {
+              subject: subjectCodesVal.parse(matches[1]),
+              class: matches[2],
+              title: matches[3],
+              section: parseInt(matches[4]),
+            }
+          : null;
+      }),
+    courseCode: z
+      .string()
+      .regex(/\w{4}\d{3}_\d{3}_\d{6}/)
+      .nullable()
+      .transform((input) => {
+        const matches = input?.match(/(\w{4})(\d{3})_(\d{3})_(\d{4})(\d{2})/);
+
+        return matches
+          ? {
+              courseCode: {
+                subject: subjectCodesVal.parse(matches[1]),
+                class: parseInt(matches[2]),
+                section: parseInt(matches[3]),
+              },
+              termCode: {
+                year: parseInt(matches[4]),
+                term: parseInt(matches[5]),
+              },
+            }
+          : null;
+      }),
   })
 );
 
