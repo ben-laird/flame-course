@@ -4,6 +4,61 @@ import { FragmentUtil } from "../input";
 import { subjectCodesVal } from "./subjects";
 
 /**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for a grade or a set of grades.
+ */
+export const grades = FragmentUtil.createFragment(
+  gql`
+    fragment GradesFragment on Grades {
+      currentGrade
+      currentScore
+      finalGrade
+      finalScore
+      unpostedCurrentGrade
+      unpostedCurrentScore
+      unpostedFinalGrade
+      unpostedFinalScore
+    }
+  `,
+  z.object({
+    currentGrade: z.string().nullable(),
+    currentScore: z.number().nullable(),
+    finalGrade: z.string().nullable(),
+    finalScore: z.number().nullable(),
+    unpostedCurrentGrade: z.string().nullable(),
+    unpostedCurrentScore: z.number().nullable(),
+    unpostedFinalGrade: z.string().nullable(),
+    unpostedFinalScore: z.number().nullable(),
+  })
+);
+
+/**
+ * A pre-fabricated GraphQL fragment and validator to specify arguments for an enrollment.
+ */
+export const enrollment = FragmentUtil.compose(
+  [grades],
+  ([[gradesGQL, gradesVal]]) =>
+    FragmentUtil.createFragment(
+      gql`
+        ${gradesGQL}
+        fragment EnrollmentFragment on Enrollment {
+          id: _id
+          state
+          htmlUrl
+          grades {
+            ...GradesFragment
+          }
+        }
+      `,
+      z.object({
+        id: z.number(),
+        state: z.string(),
+        htmlUrl: z.string().url().nullable(),
+        grades: gradesVal.nullable(),
+      })
+    )
+);
+
+/**
  * A pre-fabricated GraphQL fragment and validator to specify arguments for a course.
  */
 export const course = FragmentUtil.createFragment(
@@ -397,32 +452,4 @@ export const assignment = FragmentUtil.compose(
           .nullable(),
       })
     )
-);
-
-/**
- * A pre-fabricated GraphQL fragment and validator to specify arguments for a grade or a set of grades.
- */
-export const grades = FragmentUtil.createFragment(
-  gql`
-    fragment GradesFragment on Grades {
-      currentGrade
-      currentScore
-      finalGrade
-      finalScore
-      unpostedCurrentGrade
-      unpostedCurrentScore
-      unpostedFinalGrade
-      unpostedFinalScore
-    }
-  `,
-  z.object({
-    currentGrade: z.string().nullable(),
-    currentScore: z.number().nullable(),
-    finalGrade: z.string().nullable(),
-    finalScore: z.number().nullable(),
-    unpostedCurrentGrade: z.string().nullable(),
-    unpostedCurrentScore: z.number().nullable(),
-    unpostedFinalGrade: z.string().nullable(),
-    unpostedFinalScore: z.number().nullable(),
-  })
 );
